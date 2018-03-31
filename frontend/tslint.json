@@ -1,0 +1,15 @@
+{
+    "defaultSeverity": "error",
+    "extends": [
+        "tslint:recommended"
+    ],
+    "jsRules": {},
+    "rules": {
+        "interface-name": { "severity": "off" },
+        "no-console": { "severity": "off" },
+        "max-line-length": { "severity": "off" },
+        "object-literal-sort-keys": { "severity": "off" },
+        "no-unused-expression": { "severity": "off" }
+    },
+    "rulesDirectory": []
+}

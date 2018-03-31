@@ -1,0 +1,64 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    ast (2.4.0)
+    backports (3.11.1)
+    ddplugin (1.0.2)
+    dotenv (2.2.1)
+    excon (0.62.0)
+    multi_json (1.13.1)
+    mustermann (1.0.2)
+    parallel (1.12.1)
+    parser (2.5.0.5)
+      ast (~> 2.4.0)
+    powerpack (0.1.1)
+    puma (3.11.3)
+    rack (2.0.4)
+    rack-protection (2.0.1)
+      rack
+    rainbow (3.0.0)
+    rubocop (0.54.0)
+      parallel (~> 1.10)
+      parser (>= 2.5)
+      powerpack (~> 0.1)
+      rainbow (>= 2.2.2, < 4.0)
+      ruby-progressbar (~> 1.7)
+      unicode-display_width (~> 1.0, >= 1.0.1)
+    ruby-progressbar (1.9.0)
+    sequel (5.6.0)
+    sinatra (2.0.1)
+      mustermann (~> 1.0)
+      rack (~> 2.0)
+      rack-protection (= 2.0.1)
+      tilt (~> 2.0)
+    sinatra-contrib (2.0.1)
+      backports (>= 2.0)
+      multi_json
+      mustermann (~> 1.0)
+      rack-protection (= 2.0.1)
+      sinatra (= 2.0.1)
+      tilt (>= 1.3, < 3)
+    slow_enumerator_tools (1.1.0)
+    sqlite3 (1.3.13)
+    taglib-ruby (0.7.1)
+    tilt (2.0.8)
+    unicode-display_width (1.3.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  ddplugin (~> 1.0, >= 1.0.2)
+  dotenv
+  excon
+  puma
+  rubocop
+  sequel
+  sinatra
+  sinatra-contrib
+  slow_enumerator_tools
+  sqlite3
+  taglib-ruby
+
+BUNDLED WITH
+   1.16.1

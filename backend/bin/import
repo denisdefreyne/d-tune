@@ -1,0 +1,47 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'optparse'
+
+require_relative '../lib/d-play/indexer'
+
+usage = "Usage: #{$PROGRAM_NAME} [options] command"
+
+options = {}
+OptionParser.new do |opts|
+  opts.banner = usage
+
+  opts.on('-c PATH', '--csv-path=PATH', 'Specify path to CSV file') do |v|
+    options[:csv_path] = v
+  end
+
+  opts.on('-d PATH', '--db-path=PATH', 'Specify path to database') do |v|
+    options[:db_path] = v
+  end
+
+  opts.on('-h', '--help', 'Print this help') do
+    puts opts
+    exit 1
+  end
+end.parse!
+
+unless options.key?(:csv_path)
+  warn 'Error: CSV path not specified'
+  exit 1
+end
+
+unless options.key?(:db_path)
+  warn 'Error: database path not specified'
+  exit 1
+end
+
+case ARGV
+when []
+  DPlay::Indexer::Importer.new(
+    input_file_path: options[:csv_path],
+    output_file_path: options[:db_path]
+  ).run
+else
+  warn usage
+  exit 1
+end

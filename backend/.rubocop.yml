@@ -1,0 +1,28 @@
+AllCops:
+  TargetRubyVersion: "2.5"
+
+Naming/UncommunicativeMethodParamName:
+  AllowedNames:
+    - db
+
+Naming/FileName:
+  Exclude:
+    - 'lib/d-play.rb'
+
+Lint/AssignmentInCondition:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/LineLength:
+  Enabled: false

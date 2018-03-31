@@ -1,0 +1,18 @@
+# frozen_string_literal: true
+
+source 'https://rubygems.org'
+
+gem 'ddplugin', '~> 1.0', '>= 1.0.2'
+gem 'dotenv'
+gem 'excon'
+gem 'puma'
+gem 'sequel'
+gem 'sinatra'
+gem 'sinatra-contrib'
+gem 'slow_enumerator_tools'
+gem 'sqlite3'
+gem 'taglib-ruby'
+
+group :development do
+  gem 'rubocop'
+end

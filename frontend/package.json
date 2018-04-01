@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "webpack --config=./webpack.config.js --mode=production",
-    "start": "webpack-dev-server --config=./webpack.config.js --mode=development",
+    "build": "parcel build src/index.html",
+    "start": "parcel src/index.html",
     "test": "npx tslint src/**/*.{ts,tsx}"
   },
   "keywords": [],

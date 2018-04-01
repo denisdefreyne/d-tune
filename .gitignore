@@ -1,4 +1,6 @@
+.cache
 .env
 data
+dist
 /frontend/node_modules
 /frontend/dist/bundle.js

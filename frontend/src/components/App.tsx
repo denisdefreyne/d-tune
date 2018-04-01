@@ -12,51 +12,7 @@ import * as style from "./style.css";
 
 const {
   default: styled,
-  injectGlobal,
 } = styledComponents;
-
-injectGlobal`
-  body {
-    background: #fff;
-
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    font-size: 14px;
-    line-height: 20px;
-  }
-
-  table {
-    border-collapse: collapse;
-  }
-
-  ul, ol {
-    margin: 0;
-    padding: 0;
-  }
-
-  li {
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-  }
-
-  dl {
-    margin: 0;
-    padding: 0;
-  }
-
-  dt {
-    text-transform: uppercase;
-
-    font-weight: normal;
-    font-size: 12px;
-
-    margin: 10px 0 0 0;
-  }
-
-  dd {
-    margin: 0;
-  }
-`;
 
 const Page = styled.div`
 `;

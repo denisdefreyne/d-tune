@@ -7,6 +7,7 @@ import Label from "../types/label";
 import PlayingTrack from "../types/playing_track";
 import Track from "../types/track";
 
+import { Button, StatusBox } from "./common";
 import * as style from "./style.css";
 
 const {
@@ -139,14 +140,6 @@ const DetailBox = styled.div`
   left: 0;
 `;
 
-interface PropsWithChild {
-  children: React.ReactNode;
-}
-
-const StatusBox = (props: PropsWithChild) => (
-  <div className={style.statusBox}>{props.children}</div>
-);
-
 interface PickListItemProps {
   isSelected?: boolean;
   isSpecial?: boolean;
@@ -187,44 +180,7 @@ const PickListItem = styled.li`
   ` : ""}
 `;
 
-const PlayButton = styled.button`
-  color: #000;
-
-  border: 1px solid #000;
-
-  box-shadow: 3px 3px 0 #ccc;
-
-  background: #fff;
-
-  margin: 0 8px 0 0;
-  padding: 3px;
-
-  &:focus {
-    outline:0;
-  }
-
-  &:hover {
-    position: relative;
-
-    top: -1px;
-    left: -1px;
-
-    box-shadow: 4px 4px 0 #ccc;
-  }
-
-  &:active {
-    position: relative;
-
-    color: #000;
-
-    top: 1px;
-    left: 1px;
-
-    box-shadow: 2px 2px 0 #ccc;
-  }
-`;
-
-// -----
+// -----------------------------------------------------------------------------
 
 interface LabelRowProps {
   selectedLabel: Label | null;
@@ -356,7 +312,7 @@ interface TrackDetailsProps {
 
 const TrackDetails = (props: TrackDetailsProps) => (
   <React.Fragment>
-    <PlayButton onClick={(e) => props.onTrackPlayButtonClicked(props.track)}>PLAY</PlayButton>
+    <Button onClick={(e) => props.onTrackPlayButtonClicked(props.track)}>PLAY</Button>
 
     <dl>
       <dt>Title</dt>

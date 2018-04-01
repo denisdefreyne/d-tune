@@ -1,0 +1,11 @@
+.oink {
+    color: pink;
+}
+
+.statusBox {
+    padding: 10px;
+
+    grid-column: 1 / -1;
+
+    border: 3px double #000;
+}

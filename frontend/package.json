@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "prebuild": "tcm src",
     "build": "parcel build src/index.html",
-    "start": "parcel src/index.html",
-    "test": "npx tslint src/**/*.{ts,tsx}"
+    "prestart": "tcm --watch src &",
+    "start": "parcel --no-hmr src/index.html"
   },
   "keywords": [],
   "author": "",
@@ -21,10 +22,13 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "css-loader": "^0.28.10",
+    "parcel-bundler": "^1.7.0",
+    "postcss-modules": "^1.1.0",
     "react-hot-loader": "^4.0.0",
     "style-loader": "^0.20.3",
     "ts-loader": "^4.1.0",
     "tslint": "^5.9.1",
+    "typed-css-modules": "^0.3.1",
     "typescript": "^2.8.1",
     "webpack": "^4.1.1",
     "webpack-cli": "^2.0.11",

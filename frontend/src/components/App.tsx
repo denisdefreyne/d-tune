@@ -7,6 +7,8 @@ import Label from "../types/label";
 import PlayingTrack from "../types/playing_track";
 import Track from "../types/track";
 
+import * as style from "./style.css";
+
 const {
   default: styled,
   injectGlobal,
@@ -137,13 +139,13 @@ const DetailBox = styled.div`
   left: 0;
 `;
 
-const StatusBox = styled.div`
-  padding: 10px;
+interface PropsWithChild {
+  children: React.ReactNode;
+}
 
-  grid-column: 1 / -1;
-
-  border: 3px double #000;
-`;
+const StatusBox = (props: PropsWithChild) => (
+  <div className={style.statusBox}>{props.children}</div>
+);
 
 interface PickListItemProps {
   isSelected?: boolean;

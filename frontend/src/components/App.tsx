@@ -145,11 +145,19 @@ const StatusBox = styled.div`
   border: 3px double #000;
 `;
 
-interface Props {
+interface PickListItemProps {
   selected?: boolean;
   isSpecial?: boolean;
   last?: boolean;
 }
+
+const PickListSubtitle = styled.div`
+  font-style: italic;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+`;
 
 const PickListItem = styled.li`
   padding: 2px 15px 2px 5px;
@@ -160,18 +168,18 @@ const PickListItem = styled.li`
   white-space: nowrap;
   text-overflow: ellipsis;
 
-  background: ${(props: Props) => props.selected ? "#000" : "transparent"};
-  color: ${(props: Props) => props.selected ? "#fff" : "#000"};
+  background: ${(props: PickListItemProps) => props.selected ? "#000" : "transparent"};
+  color: ${(props: PickListItemProps) => props.selected ? "#fff" : "#000"};
 
-  ${(props: Props) => props.isSpecial ? "font-style: italic;" : ""}
+  ${(props: PickListItemProps) => props.isSpecial ? "font-style: italic;" : ""}
 
-  ${(props: Props) => !props.last ? `
+  ${(props: PickListItemProps) => !props.last ? `
     &::before {
       content: "▶";
       font-size: 10px;
       font-style: normal;
       margin-right: -10px;
-      color: ${(props2: Props) => props2.selected ? "#fff" : "#000"};
+      color: ${(props2: PickListItemProps) => props2.selected ? "#fff" : "#000"};
       float: right;
     }
   ` : ""}
@@ -251,7 +259,14 @@ interface TrackRowProps {
 
 const TrackRow = (props: TrackRowProps) => {
   const restProps = props.selectedTrack && props.track.id === props.selectedTrack.id ? { selected: true } : null;
-  return <PickListItem {...restProps} onClick={(e) => props.onTrackSelected(props.track)} last>{props.track.disc_position}-{props.track.track_position} {props.track.name}</PickListItem>;
+  return (
+    <PickListItem {...restProps} onClick={(e) => props.onTrackSelected(props.track)} last>
+        {props.track.disc_position}-{props.track.track_position} {props.track.name}
+        {props.track.artist.id !== props.track.album.artist_id
+          ? <PickListSubtitle>{props.track.artist.name}</PickListSubtitle>
+          : null}
+    </PickListItem>
+  );
 };
 
 interface LabelsColProps {

@@ -186,6 +186,8 @@ const PickListItem = styled.li`
 `;
 
 const PlayButton = styled.button`
+  color: #000;
+
   border: 1px solid #000;
 
   box-shadow: 3px 3px 0 #ccc;
@@ -210,6 +212,8 @@ const PlayButton = styled.button`
 
   &:active {
     position: relative;
+
+    color: #000;
 
     top: 1px;
     left: 1px;

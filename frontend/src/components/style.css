@@ -42,3 +42,33 @@
 
     box-shadow: 2px 2px 0 #ccc;
 }
+
+.pickListItem {
+    padding: 2px 15px 2px 5px;
+
+    cursor: pointer;
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    background: transparent;
+    color: #000;
+}
+
+.pickListItem.isSelected {
+    background: #000;
+    color: #fff;
+}
+
+.pickListItem.isSpecial {
+    font-style: italic;
+}
+
+.pickListItem.isNotLast::before {
+    content: "▶";
+    font-size: 10px;
+    font-style: normal;
+    margin-right: -10px;
+    float: right;
+}

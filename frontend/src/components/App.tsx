@@ -7,7 +7,7 @@ import Label from "../types/label";
 import PlayingTrack from "../types/playing_track";
 import Track from "../types/track";
 
-import { Button, StatusBox } from "./common";
+import { Button, PickListItem, StatusBox } from "./common";
 import * as style from "./style.css";
 
 const {
@@ -140,44 +140,12 @@ const DetailBox = styled.div`
   left: 0;
 `;
 
-interface PickListItemProps {
-  isSelected?: boolean;
-  isSpecial?: boolean;
-  isLast?: boolean;
-}
-
 const PickListSubtitle = styled.div`
   font-style: italic;
 
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-`;
-
-const PickListItem = styled.li`
-  padding: 2px 15px 2px 5px;
-
-  cursor: pointer;
-
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-
-  background: ${(props: PickListItemProps) => props.isSelected ? "#000" : "transparent"};
-  color: ${(props: PickListItemProps) => props.isSelected ? "#fff" : "#000"};
-
-  ${(props: PickListItemProps) => props.isSpecial ? "font-style: italic;" : ""}
-
-  ${(props: PickListItemProps) => !props.isLast ? `
-    &::before {
-      content: "▶";
-      font-size: 10px;
-      font-style: normal;
-      margin-right: -10px;
-      color: ${(props2: PickListItemProps) => props2.isSelected ? "#fff" : "#000"};
-      float: right;
-    }
-  ` : ""}
 `;
 
 // -----------------------------------------------------------------------------

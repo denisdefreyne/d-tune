@@ -22,6 +22,7 @@ interface PickListItemProps extends PropsWithChild, PropsWithOnClick {
   isSelected?: boolean;
   isSpecial?: boolean;
   isLast?: boolean;
+  isPlaying?: boolean;
 }
 
 const classNamesForPickListItem = (props: PickListItemProps) =>
@@ -30,6 +31,7 @@ const classNamesForPickListItem = (props: PickListItemProps) =>
     props.isSelected ? style.isSelected : null,
     props.isSpecial ? style.isSpecial : null,
     props.isLast ? null : style.isNotLast,
+    props.isPlaying ? style.isPlaying : null,
   ].filter((e) => e).join(" ");
 
 export const PickListItem = (props: PickListItemProps) => (

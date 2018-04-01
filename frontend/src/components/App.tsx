@@ -154,45 +154,49 @@ interface LabelRowProps {
   selectedLabel: Label | null;
   label: Label;
   onLabelSelected: (label: Label) => void;
+  playingTrack: PlayingTrack | null;
 }
 
 const LabelRow = (props: LabelRowProps) => {
   const restProps = props.selectedLabel && props.label.id === props.selectedLabel.id ? { isSelected: true } : null;
-  return <PickListItem {...restProps} isSpecial={props.label.isSpecial} onClick={(e) => props.onLabelSelected(props.label)}>{props.label.name}</PickListItem>;
+  return <PickListItem {...restProps} isSpecial={props.label.isSpecial} onClick={(e) => props.onLabelSelected(props.label)} isPlaying={props.playingTrack && props.playingTrack.track.album.label ? props.playingTrack.track.album.label.id === props.label.id : false}>{props.label.name}</PickListItem>;
 };
 
 interface ArtistRowProps {
   selectedArtist: Artist | null;
   artist: Artist;
   onArtistSelected: (artist: Artist) => void;
+  playingTrack: PlayingTrack | null;
 }
 
 const ArtistRow = (props: ArtistRowProps) => {
   const restProps = props.selectedArtist && props.artist.id === props.selectedArtist.id ? { isSelected: true } : null;
-  return <PickListItem {...restProps} isSpecial={false} onClick={(e) => props.onArtistSelected(props.artist)}>{props.artist.name}</PickListItem>;
+  return <PickListItem {...restProps} isSpecial={false} onClick={(e) => props.onArtistSelected(props.artist)} isPlaying={props.playingTrack ? props.playingTrack.track.album.artist.id === props.artist.id : false}>{props.artist.name}</PickListItem>;
 };
 
 interface AlbumRowProps {
   selectedAlbum: Album | null;
   album: Album;
   onAlbumSelected: (album: Album) => void;
+  playingTrack: PlayingTrack | null;
 }
 
 const AlbumRow = (props: AlbumRowProps) => {
   const restProps = props.selectedAlbum && props.album.id === props.selectedAlbum.id ? { isSelected: true } : null;
-  return <PickListItem {...restProps} onClick={(e) => props.onAlbumSelected(props.album)}>{props.album.name}</PickListItem>;
+  return <PickListItem {...restProps} onClick={(e) => props.onAlbumSelected(props.album)} isPlaying={props.playingTrack ? props.playingTrack.track.album.id === props.album.id : false}>{props.album.name}</PickListItem>;
 };
 
 interface TrackRowProps {
   selectedTrack: Track | null;
   track: Track;
   onTrackSelected: (track: Track) => void;
+  playingTrack: PlayingTrack | null;
 }
 
 const TrackRow = (props: TrackRowProps) => {
   const restProps = props.selectedTrack && props.track.id === props.selectedTrack.id ? { isSelected: true } : null;
   return (
-    <PickListItem {...restProps} onClick={(e) => props.onTrackSelected(props.track)} isLast>
+    <PickListItem {...restProps} onClick={(e) => props.onTrackSelected(props.track)} isLast isPlaying={props.playingTrack ? props.playingTrack.track.id === props.track.id : false}>
         {props.track.disc_position}-{props.track.track_position} {props.track.name}
         {props.track.artist.id !== props.track.album.artist_id
           ? <PickListSubtitle>{props.track.artist.name}</PickListSubtitle>
@@ -205,6 +209,7 @@ interface LabelsColProps {
   labels: Label[];
   selectedLabel: Label | null;
   onLabelSelected: (label: Label) => void;
+  playingTrack: PlayingTrack | null;
 }
 
 const LabelsCol = (props: LabelsColProps) => (
@@ -212,7 +217,7 @@ const LabelsCol = (props: LabelsColProps) => (
     <ColTitle>Labels</ColTitle>
     <PickList>
       {
-        Array.from(props.labels).map((l) => <LabelRow key={l.id} label={l} selectedLabel={props.selectedLabel} onLabelSelected={props.onLabelSelected} />)
+        Array.from(props.labels).map((l) => <LabelRow key={l.id} label={l} selectedLabel={props.selectedLabel} onLabelSelected={props.onLabelSelected} playingTrack={props.playingTrack} />)
       }
     </PickList>
   </Col>
@@ -222,6 +227,7 @@ interface ArtistsColProps {
   artists: Artist[];
   selectedArtist: Artist | null;
   onArtistSelected: (artist: Artist) => void;
+  playingTrack: PlayingTrack | null;
 }
 
 const ArtistsCol = (props: ArtistsColProps) => (
@@ -229,7 +235,7 @@ const ArtistsCol = (props: ArtistsColProps) => (
     <ColTitle>Artists</ColTitle>
     <PickList>
       {
-        Array.from(props.artists).map((a) => <ArtistRow key={a.id} artist={a} selectedArtist={props.selectedArtist} onArtistSelected={props.onArtistSelected} />)
+        Array.from(props.artists).map((a) => <ArtistRow key={a.id} artist={a} selectedArtist={props.selectedArtist} onArtistSelected={props.onArtistSelected} playingTrack={props.playingTrack} />)
       }
     </PickList>
   </Col>
@@ -239,6 +245,7 @@ interface AlbumsColProps {
   albums: Album[];
   selectedAlbum: Album | null;
   onAlbumSelected: (album: Album) => void;
+  playingTrack: PlayingTrack | null;
 }
 
 const AlbumsCol = (props: AlbumsColProps) => (
@@ -247,7 +254,7 @@ const AlbumsCol = (props: AlbumsColProps) => (
     <PickList>
       {
         props.albums
-          ? props.albums.map((a) => <AlbumRow key={a.id} album={a} selectedAlbum={props.selectedAlbum} onAlbumSelected={props.onAlbumSelected} />)
+          ? props.albums.map((a) => <AlbumRow key={a.id} album={a} selectedAlbum={props.selectedAlbum} onAlbumSelected={props.onAlbumSelected} playingTrack={props.playingTrack} />)
           : null
       }
     </PickList>
@@ -258,6 +265,7 @@ interface TracksColProps {
   tracks: Track[];
   selectedTrack: Track | null;
   onTrackSelected: (track: Track) => void;
+  playingTrack: PlayingTrack | null;
 }
 
 const TracksCol = (props: TracksColProps) => (
@@ -266,7 +274,7 @@ const TracksCol = (props: TracksColProps) => (
     <PickList>
       {
         props.tracks
-          ? props.tracks.map((a) => <TrackRow key={a.id} track={a} selectedTrack={props.selectedTrack} onTrackSelected={props.onTrackSelected} />)
+          ? props.tracks.map((a) => <TrackRow key={a.id} track={a} selectedTrack={props.selectedTrack} onTrackSelected={props.onTrackSelected} playingTrack={props.playingTrack} />)
           : null
       }
     </PickList>

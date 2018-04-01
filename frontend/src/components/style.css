@@ -65,10 +65,22 @@
     font-style: italic;
 }
 
-.pickListItem.isNotLast::before {
-    content: "▶";
+.pickListItem.isNotLast::before,
+.pickListItem.isPlaying::before {
     font-size: 10px;
     font-style: normal;
     margin-right: -10px;
     float: right;
+}
+
+.pickListItem.isNotLast::before {
+    content: "▶";
+}
+
+.pickListItem.isPlaying::before {
+    content: "🔊";
+}
+
+.pickListItem.isNotLast.isPlaying::before {
+    content: "🔊 ▶";
 }

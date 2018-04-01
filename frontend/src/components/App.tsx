@@ -169,6 +169,7 @@ const PickListItem = styled.li`
     &::before {
       content: "▶";
       font-size: 10px;
+      font-style: normal;
       margin-right: -10px;
       color: ${(props2: Props) => props2.selected ? "#fff" : "#000"};
       float: right;

@@ -1,6 +1,6 @@
-# D★Play
+# D★Tune
 
-_D★Play_ is a highly experimental :warning: music player.
+_D★Tune_ is a highly experimental :warning: music player.
 
 ![Screenshot](screenshot.png)
 

@@ -7,7 +7,7 @@ Naming/UncommunicativeMethodParamName:
 
 Naming/FileName:
   Exclude:
-    - 'lib/d-play.rb'
+    - 'lib/d-tune.rb'
 
 Lint/AssignmentInCondition:
   Enabled: false

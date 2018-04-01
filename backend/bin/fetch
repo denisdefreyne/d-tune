@@ -3,7 +3,7 @@
 
 require 'optparse'
 
-require_relative '../lib/d-play/indexer'
+require_relative '../lib/d-tune/indexer'
 
 usage = "Usage: #{$PROGRAM_NAME} [options] command"
 

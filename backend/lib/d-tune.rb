@@ -12,7 +12,7 @@ require 'uri'
 module DPlay
 end
 
-require_relative 'd-play/util'
+require_relative 'd-tune/util'
 
-require_relative 'd-play/server'
-require_relative 'd-play/indexer'
+require_relative 'd-tune/server'
+require_relative 'd-tune/indexer'

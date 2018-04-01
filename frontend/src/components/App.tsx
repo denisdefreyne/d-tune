@@ -413,7 +413,7 @@ const Player = (props: PlayerProps) => (
 const App = (props: AppProps) => (
   <Page>
     <Grid>
-      <H1><b>B2</b>Player 2000</H1>
+      <H1>D★<b>Tune</b></H1>
       <LabelsCol {...props} />
       <ArtistsCol {...props} />
       <AlbumsCol {...props} />

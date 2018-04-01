@@ -7,7 +7,7 @@ import AppContainer from './containers/App'
 
 // TODO: Make baseURL configurable
 ReactDOM.render(
-  <AppContainer title="B2Player" baseURL="http://localhost:9292" />,
+  <AppContainer baseURL="http://localhost:9292" />,
   document.getElementById('app')
 )
 

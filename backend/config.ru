@@ -3,6 +3,6 @@
 require 'dotenv'
 Dotenv.load
 
-require_relative 'lib/d-play'
+require_relative 'lib/d-tune'
 
 run DPlay::Server::App

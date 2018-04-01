@@ -31,7 +31,7 @@ Probably also change the (hardcoded) URL for the server in `frontend/src/index.j
 
 Inside the `backend` directory:
 
-1. Run `bin/fetch -m /mnt/music -c data/raw.csv`
+1. Run `bin/fetch -m /mnt/music -c data/raw.csv` (replace `/mnt/music` with the path to your music directory)
 2. Run `bin/import -c data/raw.csv -d data/music.db`
 
 ## Run

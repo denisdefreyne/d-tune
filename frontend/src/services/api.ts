@@ -41,7 +41,7 @@ export interface EverythingResponse {
 
 const buildLibrary = (everything: EverythingResponse): Library => {
   const labels: Label[] =
-    everything.labels.map((l) => ({ ...l, special: false }));
+    everything.labels.map((l) => ({ ...l, isSpecial: false }));
 
   const artists: Artist[] =
     everything.artists;

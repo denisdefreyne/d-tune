@@ -6,5 +6,5 @@ export enum SpecialID {
 export default interface Label {
   id: number | SpecialID;
   name: string;
-  special: boolean;
+  isSpecial: boolean;
 }

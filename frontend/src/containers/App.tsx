@@ -80,8 +80,8 @@ class AppContainer extends React.Component<AppContainerProps, AppState> {
 
   public onFetchSuccess = (library: Library) => {
     const specialLabels = [
-      { special: true, id: SpecialLabelID.ANY, name: "(any)" },
-      { special: true, id: SpecialLabelID.NONE, name: "(none)" },
+      { isSpecial: true, id: SpecialLabelID.ANY, name: "(any)" },
+      { isSpecial: true, id: SpecialLabelID.NONE, name: "(none)" },
     ];
 
     const labels = library.labels.concat(specialLabels);

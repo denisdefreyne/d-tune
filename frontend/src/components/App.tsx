@@ -146,9 +146,9 @@ const StatusBox = styled.div`
 `;
 
 interface PickListItemProps {
-  selected?: boolean;
+  isSelected?: boolean;
   isSpecial?: boolean;
-  last?: boolean;
+  isLast?: boolean;
 }
 
 const PickListSubtitle = styled.div`
@@ -168,18 +168,18 @@ const PickListItem = styled.li`
   white-space: nowrap;
   text-overflow: ellipsis;
 
-  background: ${(props: PickListItemProps) => props.selected ? "#000" : "transparent"};
-  color: ${(props: PickListItemProps) => props.selected ? "#fff" : "#000"};
+  background: ${(props: PickListItemProps) => props.isSelected ? "#000" : "transparent"};
+  color: ${(props: PickListItemProps) => props.isSelected ? "#fff" : "#000"};
 
   ${(props: PickListItemProps) => props.isSpecial ? "font-style: italic;" : ""}
 
-  ${(props: PickListItemProps) => !props.last ? `
+  ${(props: PickListItemProps) => !props.isLast ? `
     &::before {
       content: "▶";
       font-size: 10px;
       font-style: normal;
       margin-right: -10px;
-      color: ${(props2: PickListItemProps) => props2.selected ? "#fff" : "#000"};
+      color: ${(props2: PickListItemProps) => props2.isSelected ? "#fff" : "#000"};
       float: right;
     }
   ` : ""}
@@ -231,8 +231,8 @@ interface LabelRowProps {
 }
 
 const LabelRow = (props: LabelRowProps) => {
-  const restProps = props.selectedLabel && props.label.id === props.selectedLabel.id ? { selected: true } : null;
-  return <PickListItem {...restProps} isSpecial={props.label.special} onClick={(e) => props.onLabelSelected(props.label)}>{props.label.name}</PickListItem>;
+  const restProps = props.selectedLabel && props.label.id === props.selectedLabel.id ? { isSelected: true } : null;
+  return <PickListItem {...restProps} isSpecial={props.label.isSpecial} onClick={(e) => props.onLabelSelected(props.label)}>{props.label.name}</PickListItem>;
 };
 
 interface ArtistRowProps {
@@ -242,7 +242,7 @@ interface ArtistRowProps {
 }
 
 const ArtistRow = (props: ArtistRowProps) => {
-  const restProps = props.selectedArtist && props.artist.id === props.selectedArtist.id ? { selected: true } : null;
+  const restProps = props.selectedArtist && props.artist.id === props.selectedArtist.id ? { isSelected: true } : null;
   return <PickListItem {...restProps} isSpecial={false} onClick={(e) => props.onArtistSelected(props.artist)}>{props.artist.name}</PickListItem>;
 };
 
@@ -253,7 +253,7 @@ interface AlbumRowProps {
 }
 
 const AlbumRow = (props: AlbumRowProps) => {
-  const restProps = props.selectedAlbum && props.album.id === props.selectedAlbum.id ? { selected: true } : null;
+  const restProps = props.selectedAlbum && props.album.id === props.selectedAlbum.id ? { isSelected: true } : null;
   return <PickListItem {...restProps} onClick={(e) => props.onAlbumSelected(props.album)}>{props.album.name}</PickListItem>;
 };
 
@@ -264,9 +264,9 @@ interface TrackRowProps {
 }
 
 const TrackRow = (props: TrackRowProps) => {
-  const restProps = props.selectedTrack && props.track.id === props.selectedTrack.id ? { selected: true } : null;
+  const restProps = props.selectedTrack && props.track.id === props.selectedTrack.id ? { isSelected: true } : null;
   return (
-    <PickListItem {...restProps} onClick={(e) => props.onTrackSelected(props.track)} last>
+    <PickListItem {...restProps} onClick={(e) => props.onTrackSelected(props.track)} isLast>
         {props.track.disc_position}-{props.track.track_position} {props.track.name}
         {props.track.artist.id !== props.track.album.artist_id
           ? <PickListSubtitle>{props.track.artist.name}</PickListSubtitle>

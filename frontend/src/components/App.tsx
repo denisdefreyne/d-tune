@@ -190,6 +190,8 @@ const PlayButton = styled.button`
 
   box-shadow: 3px 3px 0 #ccc;
 
+  background: #fff;
+
   margin: 0 8px 0 0;
   padding: 3px;
 

@@ -403,7 +403,8 @@ const ActivePlayer = (props: ActivePlayerProps) => (
           />
         : "…"
     }
-    <MiniTitle>Now playing</MiniTitle><br />{props.playingTrack.artist.name} – {props.playingTrack.name}
+    <MiniTitle>Now playing</MiniTitle><br />
+    {props.playingTrack.track.artist.name} – {props.playingTrack.track.name}
   </div>
 );
 

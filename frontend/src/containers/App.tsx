@@ -122,7 +122,7 @@ class AppContainer extends React.Component<AppContainerProps, AppState> {
     this.setState((prevState: AppState, props: AppProps): AppState =>
       prevState.playingTrack
         ? { ...prevState, playingTrack: { ...prevState.playingTrack, mediaURL: res.track.media_url } }
-        : { ...prevState, playingTrack: { ...track, mediaURL: res.track.media_url } },
+        : { ...prevState, playingTrack: { track, mediaURL: res.track.media_url } },
     );
   }
 
@@ -140,14 +140,14 @@ class AppContainer extends React.Component<AppContainerProps, AppState> {
     this.doPlayTrack(track);
   }
 
-  public onPlaybackEnded = (track: PlayingTrack) => {
-    const albumTracks = this.tracksForAlbum(track.album);
+  public onPlaybackEnded = (playingTrack: PlayingTrack) => {
+    const albumTracks = this.tracksForAlbum(playingTrack.track.album);
 
     const comesAfter = (a: Track, b: Track) =>
       (a.disc_position === b.disc_position && a.track_position === b.track_position + 1) ||
       (a.disc_position === b.disc_position + 1 && a.track_position === 1);
 
-    const nextTrack = albumTracks.find((t: Track) => comesAfter(t, track));
+    const nextTrack = albumTracks.find((t: Track) => comesAfter(t, playingTrack.track));
     if (nextTrack) {
       this.doPlayTrack(nextTrack);
     }
@@ -157,7 +157,7 @@ class AppContainer extends React.Component<AppContainerProps, AppState> {
 
   public doPlayTrack = (track: Track) => {
     this.setState({
-      playingTrack: track,
+      playingTrack: { track },
     });
 
     API.fetchTrack(track.id, this.props.baseURL, this.onFetchTrackSuccess(track), this.onFetchTrackFailure);

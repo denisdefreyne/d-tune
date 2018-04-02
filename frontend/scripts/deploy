@@ -5,9 +5,9 @@ set -eux
 cd dist
 
 git init
-git remote add orgin ssh://git@hayward/srv/http/d-tune.denis.ws.git || true
+git remote add origin ssh://git@hayward/srv/http/d-tune.denis.ws.git || true
 git co -b prod || true
 git co prod || true
 git add .
 git ci -m 'init' || true
-git push origin prod
+git push -f origin prod

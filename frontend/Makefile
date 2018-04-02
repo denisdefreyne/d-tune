@@ -9,13 +9,13 @@ dependencies:
 
 .PHONY: run
 run:
-	npm start
+	API_URL=http://localhost:9292 npm start
 
 .PHONY: build
 build:
 	@echo === Building…
 	rm -rf dist
-	npm run build
+	API_URL=https://d-tune.denis.ws/api npm run build
 	@echo
 
 .PHONY: deploy

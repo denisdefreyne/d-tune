@@ -18,3 +18,15 @@ docker-build:
 .PHONY: docker-push
 docker-push:
 	docker push docker.denis.ws/d-tune-backend
+
+.PHONY: deploy
+deploy:
+	ssh hayward -- \
+		docker rm d-tune-backend
+	ssh hayward -- \
+		docker run \
+		--detach \
+		--restart=always \
+		--publish=9292:9292 \
+		--name=d-tune-backend \
+		docker.denis.ws/d-tune-backend

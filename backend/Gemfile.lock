@@ -6,6 +6,7 @@ GEM
     ddplugin (1.0.2)
     dotenv (2.2.1)
     excon (0.62.0)
+    json (2.1.0)
     multi_json (1.13.1)
     mustermann (1.0.2)
     parallel (1.12.1)
@@ -51,6 +52,7 @@ DEPENDENCIES
   ddplugin (~> 1.0, >= 1.0.2)
   dotenv
   excon
+  json
   puma
   rubocop
   sequel

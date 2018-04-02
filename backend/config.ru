@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+STDOUT.sync = true
+STDERR.sync = true
+
 require 'dotenv'
 Dotenv.load
 

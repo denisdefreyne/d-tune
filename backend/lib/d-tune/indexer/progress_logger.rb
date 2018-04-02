@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module B2Player
+module DTune
   module Indexer
     class ProgressLogger
       def initialize(enum:, out:)

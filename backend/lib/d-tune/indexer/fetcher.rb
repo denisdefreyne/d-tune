@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module B2Player
+module DTune
   module Indexer
     class Fetcher
       def initialize(input_directory_path:, output_file_path:, parallelism:)
@@ -11,18 +11,18 @@ module B2Player
 
       def run
         filenames =
-          B2Player::Indexer::ProgressLogger.new(
-            enum: B2Player::Indexer::FileFinder.new(
+          DTune::Indexer::ProgressLogger.new(
+            enum: DTune::Indexer::FileFinder.new(
               prefix: @input_directory_path,
               extensions: ['.mp3', '.m4a']
             ).each,
             out: $stderr
           ).each.lazy
 
-        sanitizer = B2Player::Indexer::Sanitizer.new
-        parser = B2Player::Indexer::Parser.new
+        sanitizer = DTune::Indexer::Sanitizer.new
+        parser = DTune::Indexer::Parser.new
         mapper =
-          B2Player::Indexer::ParallelMapper.new(enum: filenames, parallelism: @parallelism) do |fn|
+          DTune::Indexer::ParallelMapper.new(enum: filenames, parallelism: @parallelism) do |fn|
             {
               filename: fn.delete_prefix(@input_directory_path).delete_prefix('/'),
               properties: sanitizer.call(parser.parse_file(fn))

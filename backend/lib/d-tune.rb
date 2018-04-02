@@ -9,7 +9,7 @@ require 'sinatra/base'
 require 'sinatra/json'
 require 'uri'
 
-module DPlay
+module DTune
 end
 
 require_relative 'd-tune/util'

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module DPlay
+module DTune
   module Util
     module Connectable
       # Requires #connect method.

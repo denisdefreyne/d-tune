@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-module DPlay
+module DTune
   module Server
     module Sources
-      class B2 < DPlay::Server::Source
+      class B2 < DTune::Server::Source
         identifier :b2
 
         def self.new_from_env
@@ -23,7 +23,7 @@ module DPlay
         end
 
         def connect
-          client = DPlay::Util::B2Client.new(
+          client = DTune::Util::B2Client.new(
             account_id: @account_id,
             application_key: @application_key
           )

@@ -37,7 +37,7 @@ end
 
 case ARGV
 when []
-  DPlay::Indexer::Importer.new(
+  DTune::Indexer::Importer.new(
     input_file_path: options[:csv_path],
     output_file_path: options[:db_path]
   ).run

@@ -37,7 +37,7 @@ end
 
 case ARGV
 when []
-  DPlay::Indexer::Fetcher.new(
+  DTune::Indexer::Fetcher.new(
     input_directory_path: options[:music_dir_path],
     output_file_path: options[:csv_path],
     parallelism: 10

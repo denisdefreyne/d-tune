@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module DPlay
+module DTune
   module Util
     class B2Client
       B2_BASE_URL = 'https://api.backblazeb2.com'
@@ -29,7 +29,7 @@ module DPlay
         auth_token = body.fetch('authorizationToken')
         api_url = body.fetch('apiUrl')
 
-        DPlay::Util::B2Connection.new(
+        DTune::Util::B2Connection.new(
           account_id: @account_id,
           api_url: api_url,
           auth_token: auth_token

@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-module DPlay
+module DTune
   module Server
     module Sources
-      class HTTP < DPlay::Server::Source
+      class HTTP < DTune::Server::Source
         identifier :http
 
         def self.new_from_env

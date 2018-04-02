@@ -8,4 +8,4 @@ Dotenv.load
 
 require_relative 'lib/d-tune'
 
-run DPlay::Server::App
+run DTune::Server::App

@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-module DPlay
+module DTune
   module Server
     class Source
       extend DDPlugin::Plugin
-      include DPlay::Util::Connectable
+      include DTune::Util::Connectable
     end
   end
 end

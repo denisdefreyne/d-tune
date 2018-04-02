@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-module DPlay
+module DTune
   module Server
     class App < Sinatra::Base
       use Rack::CommonLogger
 
-      set :index, DPlay::Server::Index.new_from_env.connect_async
+      set :index, DTune::Server::Index.new_from_env.connect_async
 
       server_source_type = ENV.fetch('SERVER_SOURCE_TYPE')
-      server_source_class = DPlay::Server::Source.named(server_source_type)
+      server_source_class = DTune::Server::Source.named(server_source_type)
       set :source, server_source_class.new_from_env.connect_async
 
       before do

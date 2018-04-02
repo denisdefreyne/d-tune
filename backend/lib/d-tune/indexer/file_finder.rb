@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module B2Player
+module DTune
   module Indexer
     class FileFinder
       def initialize(prefix:, extensions:)

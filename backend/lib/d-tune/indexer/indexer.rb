@@ -8,7 +8,7 @@ require 'set'
 require 'taglib'
 require 'tmpdir'
 
-module B2Player
+module DTune
   module Indexer
   end
 end

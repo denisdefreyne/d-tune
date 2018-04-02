@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-module DPlay
+module DTune
   module Server
     class Index
-      include DPlay::Util::Connectable
+      include DTune::Util::Connectable
 
       def self.new_from_env
         new(db_url: 'sqlite://' + ENV.fetch('SERVER_INDEX_DB_PATH'))

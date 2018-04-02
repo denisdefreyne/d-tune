@@ -22,6 +22,8 @@ docker-push:
 .PHONY: deploy
 deploy:
 	ssh hayward -- \
+		docker pull docker.denis.ws/d-tune-backend
+	ssh hayward -- \
 		docker stop d-tune-backend
 	ssh hayward -- \
 		docker rm d-tune-backend

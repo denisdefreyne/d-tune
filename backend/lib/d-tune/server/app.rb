@@ -31,13 +31,17 @@ module DTune
 
           email = payload.fetch('email')
           unless settings.permitted_emails.include?(email)
-            body JSON.dump(reason: 'you are not Denis')
-            halt 302
+            body JSON.dump(reason: 'You are not Denis.')
+            halt 403
           end
         rescue GoogleIDToken::ValidationError => e
-          body JSON.dump(reason: 'invalid token')
+          body JSON.dump(reason: 'Your token is invalid.')
           halt 403
         end
+      end
+
+      get '/test' do
+        json success: true
       end
 
       get '/everything' do

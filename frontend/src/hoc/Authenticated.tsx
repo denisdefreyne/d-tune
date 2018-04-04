@@ -4,9 +4,37 @@ export interface InjectedProps {
   idToken: string;
 }
 
+interface OriginalProps {
+  baseURL: string;
+}
+
+interface AuthStateInitial {
+  kind: "AuthStateInitial";
+}
+
+interface AuthStateSignedIn {
+  kind: "AuthStateSignedIn";
+  idToken: string;
+}
+
+interface AuthStateVerified {
+  kind: "AuthStateVerified";
+  idToken: string;
+}
+
+interface AuthStateFailed {
+  kind: "AuthStateFailed";
+  reason: string;
+}
+
+type AuthState =
+  AuthStateInitial |
+  AuthStateSignedIn |
+  AuthStateVerified |
+  AuthStateFailed;
+
 interface State {
-  idToken: string | null;
-  error: string | null;
+  authState: AuthState;
 }
 
 interface Options {
@@ -14,7 +42,7 @@ interface Options {
 }
 
 const authenticated = ({ debug = false }: Options = {}) =>
-  <TOriginalProps extends {}>(
+  <TOriginalProps extends OriginalProps>(
     Component: (React.ComponentClass<TOriginalProps & InjectedProps>
               | React.StatelessComponent<TOriginalProps & InjectedProps>),
   ) => {
@@ -28,8 +56,7 @@ const authenticated = ({ debug = false }: Options = {}) =>
         super(props);
 
         this.state = {
-          idToken: null,
-          error: null,
+          authState: { kind: "AuthStateInitial" },
         };
       }
 
@@ -37,17 +64,24 @@ const authenticated = ({ debug = false }: Options = {}) =>
         window.onSignIn = (googleUser: any) => {
           const email = googleUser.getBasicProfile().getEmail();
           const idToken = googleUser.getAuthResponse().id_token;
-          this.setState({ idToken });
+          this.setState({ authState: { kind: "AuthStateSignedIn", idToken } });
+          this.verify(idToken);
         };
       }
 
       public render() {
-        if (this.state.idToken) {
-          return this.renderWrapped(this.state.idToken);
-        } else if (this.state.error) {
-          return <div style={{ margin: "40px" }}>{this.state.error}</div>;
-        } else {
-          return this.renderSignin();
+        switch (this.state.authState.kind) {
+          case "AuthStateInitial":
+            return this.renderSignin();
+
+          case "AuthStateSignedIn":
+            return <div style={{ margin: "40px" }}>Verifying…</div>;
+
+          case "AuthStateVerified":
+            return <Component idToken={this.state.authState.idToken} {...this.props} />;
+
+          case "AuthStateFailed":
+            return <div style={{ margin: "40px" }}><strong>Error!</strong> {this.state.authState.reason}</div>;
         }
       }
 
@@ -57,6 +91,26 @@ const authenticated = ({ debug = false }: Options = {}) =>
 
       private renderWrapped(idToken: string): JSX.Element {
         return <Component idToken={idToken} {...this.props} />;
+      }
+
+      private verify(idToken: string) {
+        const onSuccess = (response: Response) => {
+          if (response.ok) {
+            this.setState({
+              authState: { kind: "AuthStateVerified", idToken },
+            });
+          } else {
+            response.json().then((body) => {
+              this.setState({
+                authState: { kind: "AuthStateFailed", reason: body.reason },
+              });
+            });
+          }
+        };
+
+        const headers = { "Dtune-Access-Token": idToken };
+        fetch(this.props.baseURL + "/test", { headers })
+          .then(onSuccess);
       }
     };
 

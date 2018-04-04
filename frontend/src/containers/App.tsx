@@ -80,7 +80,7 @@ class AppContainer extends React.Component<AppContainerProps & AuthenticatedProp
   }
 
   public componentDidMount() {
-    API.fetchEverything(this.props.baseURL, this.props.idToken, this.onFetchSuccess, this.onFetchFailure);
+    API.fetchEverything(this.props.baseURL, this.props.getIdToken(), this.onFetchSuccess, this.onFetchFailure);
   }
 
   public onFetchSuccess = (library: Library) => {
@@ -165,7 +165,7 @@ class AppContainer extends React.Component<AppContainerProps & AuthenticatedProp
       playingTrack: { track },
     });
 
-    API.fetchTrack(track.id, this.props.baseURL, this.props.idToken, this.onFetchTrackSuccess(track), this.onFetchTrackFailure);
+    API.fetchTrack(track.id, this.props.baseURL, this.props.getIdToken(), this.onFetchTrackSuccess(track), this.onFetchTrackFailure);
   }
 
   // Filtering

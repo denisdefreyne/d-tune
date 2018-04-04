@@ -1,7 +1,7 @@
 import * as React from "react";
 
 export interface InjectedProps {
-  idToken: string;
+  getIdToken: () => string | null;
 }
 
 interface OriginalProps {
@@ -14,12 +14,12 @@ interface AuthStateInitial {
 
 interface AuthStateSignedIn {
   kind: "AuthStateSignedIn";
-  idToken: string;
+  googleUser: any;
 }
 
 interface AuthStateVerified {
   kind: "AuthStateVerified";
-  idToken: string;
+  googleUser: any;
 }
 
 interface AuthStateFailed {
@@ -67,9 +67,8 @@ const authenticated = ({ debug = false }: Options = {}) =>
       public componentDidMount() {
         window.onSignIn = (googleUser: any) => {
           const email = googleUser.getBasicProfile().getEmail();
-          const idToken = googleUser.getAuthResponse().id_token;
-          this.setState({ authState: { kind: "AuthStateSignedIn", idToken } });
-          this.verify(idToken);
+          this.setState({ authState: { kind: "AuthStateSignedIn", googleUser } });
+          this.verify(googleUser);
         };
       }
 
@@ -82,7 +81,7 @@ const authenticated = ({ debug = false }: Options = {}) =>
             return <div style={{ margin: "40px" }}>Verifying…</div>;
 
           case "AuthStateVerified":
-            return <Component idToken={this.state.authState.idToken} {...this.props} />;
+            return <Component getIdToken={this.getIdToken} {...this.props} />;
 
           case "AuthStateFailed":
             return <div style={{ margin: "40px" }}><strong>Error!</strong> {this.state.authState.reason}</div>;
@@ -93,15 +92,16 @@ const authenticated = ({ debug = false }: Options = {}) =>
         <div className="g-signin2" style={{ margin: "40px" }} data-onsuccess="onSignIn"></div>
       )
 
-      private renderWrapped(idToken: string): JSX.Element {
-        return <Component idToken={idToken} {...this.props} />;
-      }
+      private getIdToken = (): string | null =>
+        this.state.authState.kind === "AuthStateVerified"
+          ? this.state.authState.googleUser.getAuthResponse().id_token
+          : null
 
-      private verify(idToken: string) {
+      private verify(googleUser: any) {
         const onSuccess = (response: Response) => {
           if (response.ok) {
             this.setState({
-              authState: { kind: "AuthStateVerified", idToken },
+              authState: { kind: "AuthStateVerified", googleUser },
             });
           } else {
             response.json().then((body) => {
@@ -112,6 +112,7 @@ const authenticated = ({ debug = false }: Options = {}) =>
           }
         };
 
+        const idToken = googleUser.getAuthResponse().id_token;
         const headers = { "Dtune-Access-Token": idToken };
         fetch(this.props.baseURL + "/test", { headers })
           .then(onSuccess);

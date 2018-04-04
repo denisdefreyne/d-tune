@@ -69,22 +69,26 @@ function handleErrors(response: Response) {
   return response;
 }
 
-const fetchEverything = (baseURL: string, idToken: string, onSuccess: (l: Library) => void, onFailure: (e: any) => void) => {
-  const headers = { "Dtune-Access-Token": idToken };
-  fetch(baseURL + "/everything", { headers })
-    .then(handleErrors)
-    .then((response) => response.json())
-    .catch((error) => onFailure(error))
-    .then((response) => onSuccess(buildLibrary(response)));
+const fetchEverything = (baseURL: string, idToken: string | null, onSuccess: (l: Library) => void, onFailure: (e: any) => void) => {
+  if (idToken) {
+    const headers = { "Dtune-Access-Token": idToken };
+    fetch(baseURL + "/everything", { headers })
+      .then(handleErrors)
+      .then((response) => response.json())
+      .catch((error) => onFailure(error))
+      .then((response) => onSuccess(buildLibrary(response)));
+  }
 };
 
-const fetchTrack = (trackID: number, baseURL: string, idToken: string, onSuccess: (r: TrackDetailsResponse) => void, onFailure: (e: any) => void) => {
-  const headers = { "Dtune-Access-Token": idToken };
-  fetch(baseURL + "/tracks/" + trackID, { headers })
-    .then(handleErrors)
-    .then((response) => response.json())
-    .catch((error) => onFailure(error))
-    .then((response) => onSuccess(response));
+const fetchTrack = (trackID: number, baseURL: string, idToken: string | null, onSuccess: (r: TrackDetailsResponse) => void, onFailure: (e: any) => void) => {
+  if (idToken) {
+    const headers = { "Dtune-Access-Token": idToken };
+    fetch(baseURL + "/tracks/" + trackID, { headers })
+      .then(handleErrors)
+      .then((response) => response.json())
+      .catch((error) => onFailure(error))
+      .then((response) => onSuccess(response));
+  }
 };
 
 const API = {

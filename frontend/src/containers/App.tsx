@@ -1,19 +1,21 @@
 import * as React from "react";
 
 import App, { AppProps } from "../components/App";
+
+import authenticated, { InjectedProps as AuthenticatedProps } from "../hoc/Authenticated";
+
 import API, { TrackDetailsResponse } from "../services/api";
+
 import Album from "../types/album";
 import Artist from "../types/artist";
 import Label, { SpecialID as SpecialLabelID } from "../types/label";
 import Library from "../types/library";
 import PlayingTrack from "../types/playing_track";
 import Track from "../types/track";
+
 import { byName, isNotUndefined, uniq } from "../util";
 
 interface AppState {
-  idToken: string | null;
-  signInError: string | null;
-
   library: Library;
 
   selectedLabel: Label | null;
@@ -24,7 +26,7 @@ interface AppState {
   playingTrack: PlayingTrack | null;
 }
 
-interface AppContainerProps extends AppProps {
+interface AppContainerProps {
   baseURL: string;
 }
 
@@ -60,8 +62,8 @@ function byTrackAndDiscPosition(a: Track, b: Track) {
     : (a.disc_position || 1) - (b.disc_position || 1);
 }
 
-class AppContainer extends React.Component<AppContainerProps, AppState> {
-  constructor(props: AppContainerProps) {
+class AppContainer extends React.Component<AppContainerProps & AuthenticatedProps, AppState> {
+  constructor(props: AppContainerProps & AuthenticatedProps) {
     super(props);
 
     this.state = {
@@ -71,9 +73,6 @@ class AppContainer extends React.Component<AppContainerProps, AppState> {
         albums: [],
         tracks: [],
       },
-
-      idToken: null,
-      signInError: null,
 
       selectedLabel: null,
       selectedArtist: null,
@@ -85,16 +84,7 @@ class AppContainer extends React.Component<AppContainerProps, AppState> {
   }
 
   public componentDidMount() {
-    window.onSignIn = (googleUser: any) => {
-      const email = googleUser.getBasicProfile().getEmail();
-      const idToken = googleUser.getAuthResponse().id_token;
-      this.setState({ idToken });
-      this.onSignedIn(idToken);
-    };
-  }
-
-  public onSignedIn = (idToken: string) => {
-    API.fetchEverything(this.props.baseURL, idToken, this.onFetchSuccess, this.onFetchFailure);
+    API.fetchEverything(this.props.baseURL, this.props.idToken, this.onFetchSuccess, this.onFetchFailure);
   }
 
   public onFetchSuccess = (library: Library) => {
@@ -113,7 +103,7 @@ class AppContainer extends React.Component<AppContainerProps, AppState> {
   }
 
   public onLabelSelected = (label: Label) => {
-    this.setState((prevState: AppState, props: AppProps) => ({
+    this.setState((prevState: AppState, props: AppContainerProps) => ({
       library: prevState.library,
       selectedLabel: label,
       selectedArtist: this.artistsForLabel(label).filter((a) => a === prevState.selectedArtist).length ? prevState.selectedArtist : null,
@@ -138,7 +128,7 @@ class AppContainer extends React.Component<AppContainerProps, AppState> {
   }
 
   public onFetchTrackSuccess = (track: Track) => (res: TrackDetailsResponse) => {
-    this.setState((prevState: AppState, props: AppProps): AppState =>
+    this.setState((prevState: AppState, props: AppContainerProps): AppState =>
       prevState.playingTrack
         ? { ...prevState, playingTrack: { ...prevState.playingTrack, mediaURL: res.track.media_url } }
         : { ...prevState, playingTrack: { track, mediaURL: res.track.media_url } },
@@ -179,9 +169,7 @@ class AppContainer extends React.Component<AppContainerProps, AppState> {
       playingTrack: { track },
     });
 
-    if (this.state.idToken) {
-      API.fetchTrack(track.id, this.props.baseURL, this.state.idToken, this.onFetchTrackSuccess(track), this.onFetchTrackFailure);
-    }
+    API.fetchTrack(track.id, this.props.baseURL, this.props.idToken, this.onFetchTrackSuccess(track), this.onFetchTrackFailure);
   }
 
   // Filtering
@@ -238,42 +226,30 @@ class AppContainer extends React.Component<AppContainerProps, AppState> {
   // Render
 
   public render() {
-    if (this.state.idToken) {
-      return this.renderApp();
-    } else if (this.state.signInError) {
-      return <div style={{ margin: "40px" }}>{this.state.signInError}</div>;
-    } else {
-      return this.renderSignin();
-    }
+    return (
+      <App
+        labels={this.labelsToShow()}
+        artists={this.artistsToShow()}
+        albums={this.albumsToShow()}
+        tracks={this.tracksToShow()}
+
+        selectedLabel={this.state.selectedLabel}
+        selectedArtist={this.state.selectedArtist}
+        selectedAlbum={this.state.selectedAlbum}
+        selectedTrack={this.state.selectedTrack}
+
+        onLabelSelected={this.onLabelSelected}
+        onArtistSelected={this.onArtistSelected}
+        onAlbumSelected={this.onAlbumSelected}
+        onTrackSelected={this.onTrackSelected}
+
+        onTrackPlayButtonClicked={this.onTrackPlayButtonClicked}
+        playingTrack={this.state.playingTrack}
+
+        onPlaybackEnded={this.onPlaybackEnded}
+      />
+    );
   }
-
-  public renderSignin = () => (
-    <div className="g-signin2" style={{ margin: "40px" }} data-onsuccess="onSignIn"></div>
-  )
-
-  public renderApp = () => (
-    <App
-      labels={this.labelsToShow()}
-      artists={this.artistsToShow()}
-      albums={this.albumsToShow()}
-      tracks={this.tracksToShow()}
-
-      selectedLabel={this.state.selectedLabel}
-      selectedArtist={this.state.selectedArtist}
-      selectedAlbum={this.state.selectedAlbum}
-      selectedTrack={this.state.selectedTrack}
-
-      onLabelSelected={this.onLabelSelected}
-      onArtistSelected={this.onArtistSelected}
-      onAlbumSelected={this.onAlbumSelected}
-      onTrackSelected={this.onTrackSelected}
-
-      onTrackPlayButtonClicked={this.onTrackPlayButtonClicked}
-      playingTrack={this.state.playingTrack}
-
-      onPlaybackEnded={this.onPlaybackEnded}
-    />
-  )
 }
 
-export default AppContainer;
+export default authenticated({ debug: true })(AppContainer);

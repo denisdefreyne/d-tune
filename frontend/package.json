@@ -2,7 +2,7 @@
   "name": "react-playground",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.tsx",
   "scripts": {
     "prebuild": "tcm src",
     "build": "parcel build src/index.html",

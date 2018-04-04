@@ -30,10 +30,6 @@ interface AppContainerProps {
   baseURL: string;
 }
 
-declare global {
-  interface Window { onSignIn: any; }
-}
-
 // Utils
 
 function compareLabels(a: Label, b: Label) {

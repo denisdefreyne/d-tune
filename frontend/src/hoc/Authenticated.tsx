@@ -41,6 +41,10 @@ interface Options {
   debug?: boolean;
 }
 
+declare global {
+  interface Window { onSignIn: any; }
+}
+
 const authenticated = ({ debug = false }: Options = {}) =>
   <TOriginalProps extends OriginalProps>(
     Component: (React.ComponentClass<TOriginalProps & InjectedProps>

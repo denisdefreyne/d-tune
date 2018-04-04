@@ -248,4 +248,4 @@ class AppContainer extends React.Component<AppContainerProps & AuthenticatedProp
   }
 }
 
-export default authenticated({ debug: true })(AppContainer);
+export default authenticated(AppContainer);

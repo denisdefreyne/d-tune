@@ -50,15 +50,11 @@ interface State {
   authState: AuthState;
 }
 
-interface Options {
-  debug?: boolean;
-}
-
 declare global {
   interface Window { onSignIn: (u: GoogleUser) => void; }
 }
 
-const authenticated = ({ debug = false }: Options = {}) =>
+const authenticated =
   <TOriginalProps extends OriginalProps>(
     Component: (React.ComponentClass<TOriginalProps & InjectedProps>
               | React.StatelessComponent<TOriginalProps & InjectedProps>),
@@ -88,7 +84,7 @@ const authenticated = ({ debug = false }: Options = {}) =>
       public render() {
         switch (this.state.authState.kind) {
           case "AuthStateInitial":
-            return this.renderSignin();
+            return <div className="g-signin2" style={{ margin: "40px" }} data-onsuccess="onSignIn"></div>;
 
           case "AuthStateSignedIn":
             return <div style={{ margin: "40px" }}>Verifying…</div>;
@@ -100,10 +96,6 @@ const authenticated = ({ debug = false }: Options = {}) =>
             return <div style={{ margin: "40px" }}><strong>Error!</strong> {this.state.authState.reason}</div>;
         }
       }
-
-      private renderSignin = () => (
-        <div className="g-signin2" style={{ margin: "40px" }} data-onsuccess="onSignIn"></div>
-      )
 
       private getIdToken = (): string | null =>
         this.state.authState.kind === "AuthStateVerified"

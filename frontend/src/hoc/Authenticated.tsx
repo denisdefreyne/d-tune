@@ -8,18 +8,31 @@ interface OriginalProps {
   baseURL: string;
 }
 
+interface GoogleUserBasicProfile {
+  getEmail: () => string;
+}
+
+interface GoogleUserAuthResponse {
+  id_token: string;
+}
+
+interface GoogleUser {
+  getAuthResponse: () => GoogleUserAuthResponse;
+  getBasicProfile: () => GoogleUserBasicProfile;
+}
+
 interface AuthStateInitial {
   kind: "AuthStateInitial";
 }
 
 interface AuthStateSignedIn {
   kind: "AuthStateSignedIn";
-  googleUser: any;
+  googleUser: GoogleUser;
 }
 
 interface AuthStateVerified {
   kind: "AuthStateVerified";
-  googleUser: any;
+  googleUser: GoogleUser;
 }
 
 interface AuthStateFailed {
@@ -42,7 +55,7 @@ interface Options {
 }
 
 declare global {
-  interface Window { onSignIn: any; }
+  interface Window { onSignIn: (u: GoogleUser) => void; }
 }
 
 const authenticated = ({ debug = false }: Options = {}) =>
@@ -65,7 +78,7 @@ const authenticated = ({ debug = false }: Options = {}) =>
       }
 
       public componentDidMount() {
-        window.onSignIn = (googleUser: any) => {
+        window.onSignIn = (googleUser: GoogleUser) => {
           const email = googleUser.getBasicProfile().getEmail();
           this.setState({ authState: { kind: "AuthStateSignedIn", googleUser } });
           this.verify(googleUser);
@@ -97,7 +110,7 @@ const authenticated = ({ debug = false }: Options = {}) =>
           ? this.state.authState.googleUser.getAuthResponse().id_token
           : null
 
-      private verify(googleUser: any) {
+      private verify(googleUser: GoogleUser) {
         const onSuccess = (response: Response) => {
           if (response.ok) {
             this.setState({

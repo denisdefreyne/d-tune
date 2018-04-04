@@ -11,6 +11,9 @@ import Track from "../types/track";
 import { byName, isNotUndefined, uniq } from "../util";
 
 interface AppState {
+  idToken: string | null;
+  signInError: string | null;
+
   library: Library;
 
   selectedLabel: Label | null;
@@ -23,6 +26,10 @@ interface AppState {
 
 interface AppContainerProps extends AppProps {
   baseURL: string;
+}
+
+declare global {
+  interface Window { onSignIn: any; }
 }
 
 // Utils
@@ -65,6 +72,9 @@ class AppContainer extends React.Component<AppContainerProps, AppState> {
         tracks: [],
       },
 
+      idToken: null,
+      signInError: null,
+
       selectedLabel: null,
       selectedArtist: null,
       selectedAlbum: null,
@@ -75,7 +85,16 @@ class AppContainer extends React.Component<AppContainerProps, AppState> {
   }
 
   public componentDidMount() {
-    API.fetchEverything(this.props.baseURL, this.onFetchSuccess, this.onFetchFailure);
+    window.onSignIn = (googleUser: any) => {
+      const email = googleUser.getBasicProfile().getEmail();
+      const idToken = googleUser.getAuthResponse().id_token;
+      this.setState({ idToken });
+      this.onSignedIn(idToken);
+    };
+  }
+
+  public onSignedIn = (idToken: string) => {
+    API.fetchEverything(this.props.baseURL, idToken, this.onFetchSuccess, this.onFetchFailure);
   }
 
   public onFetchSuccess = (library: Library) => {
@@ -160,7 +179,9 @@ class AppContainer extends React.Component<AppContainerProps, AppState> {
       playingTrack: { track },
     });
 
-    API.fetchTrack(track.id, this.props.baseURL, this.onFetchTrackSuccess(track), this.onFetchTrackFailure);
+    if (this.state.idToken) {
+      API.fetchTrack(track.id, this.props.baseURL, this.state.idToken, this.onFetchTrackSuccess(track), this.onFetchTrackFailure);
+    }
   }
 
   // Filtering
@@ -217,7 +238,21 @@ class AppContainer extends React.Component<AppContainerProps, AppState> {
   // Render
 
   public render() {
-    return <App
+    if (this.state.idToken) {
+      return this.renderApp();
+    } else if (this.state.signInError) {
+      return <div style={{ margin: "40px" }}>{this.state.signInError}</div>;
+    } else {
+      return this.renderSignin();
+    }
+  }
+
+  public renderSignin = () => (
+    <div className="g-signin2" style={{ margin: "40px" }} data-onsuccess="onSignIn"></div>
+  )
+
+  public renderApp = () => (
+    <App
       labels={this.labelsToShow()}
       artists={this.artistsToShow()}
       albums={this.albumsToShow()}
@@ -237,8 +272,8 @@ class AppContainer extends React.Component<AppContainerProps, AppState> {
       playingTrack={this.state.playingTrack}
 
       onPlaybackEnded={this.onPlaybackEnded}
-    />;
-  }
+    />
+  )
 }
 
 export default AppContainer;

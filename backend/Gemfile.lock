@@ -6,7 +6,10 @@ GEM
     ddplugin (1.0.2)
     dotenv (2.2.1)
     excon (0.62.0)
+    google-id-token (1.4.2)
+      jwt (>= 1)
     json (2.1.0)
+    jwt (2.1.0)
     multi_json (1.13.1)
     mustermann (1.0.2)
     parallel (1.12.1)
@@ -15,6 +18,7 @@ GEM
     powerpack (0.1.1)
     puma (3.11.3)
     rack (2.0.4)
+    rack-cors (1.0.2)
     rack-protection (2.0.1)
       rack
     rainbow (3.0.0)
@@ -52,8 +56,10 @@ DEPENDENCIES
   ddplugin (~> 1.0, >= 1.0.2)
   dotenv
   excon
+  google-id-token
   json
   puma
+  rack-cors
   rubocop
   sequel
   sinatra

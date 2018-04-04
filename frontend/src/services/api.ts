@@ -61,15 +61,27 @@ const buildLibrary = (everything: EverythingResponse): Library => {
   };
 };
 
-const fetchEverything = (baseURL: string, onSuccess: (l: Library) => void, onFailure: (e: any) => void) => {
-  fetch(baseURL + "/everything")
+function handleErrors(response: Response) {
+  if (!response.ok) {
+      throw Error(response.statusText);
+  }
+
+  return response;
+}
+
+const fetchEverything = (baseURL: string, idToken: string, onSuccess: (l: Library) => void, onFailure: (e: any) => void) => {
+  const headers = { "Dtune-Access-Token": idToken };
+  fetch(baseURL + "/everything", { headers })
+    .then(handleErrors)
     .then((response) => response.json())
     .catch((error) => onFailure(error))
     .then((response) => onSuccess(buildLibrary(response)));
 };
 
-const fetchTrack = (trackID: number, baseURL: string, onSuccess: (r: TrackDetailsResponse) => void, onFailure: (e: any) => void) => {
-  fetch(baseURL + "/tracks/" + trackID)
+const fetchTrack = (trackID: number, baseURL: string, idToken: string, onSuccess: (r: TrackDetailsResponse) => void, onFailure: (e: any) => void) => {
+  const headers = { "Dtune-Access-Token": idToken };
+  fetch(baseURL + "/tracks/" + trackID, { headers })
+    .then(handleErrors)
     .then((response) => response.json())
     .catch((error) => onFailure(error))
     .then((response) => onSuccess(response));

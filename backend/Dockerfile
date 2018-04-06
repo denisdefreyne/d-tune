@@ -6,11 +6,12 @@ EXPOSE 9292
 
 WORKDIR /srv/app
 
+RUN apk add sqlite taglib sqlite-libs
+
 COPY Gemfile /srv/app
 COPY Gemfile.lock /srv/app
 
-RUN apk add sqlite taglib sqlite-libs && \
-    apk add --virtual build-dependencies build-base ruby-dev sqlite-dev taglib-dev && \
+RUN apk add --virtual build-dependencies build-base ruby-dev sqlite-dev taglib-dev && \
     bundle install --path=vendor/bundle && \
     apk del build-dependencies
 

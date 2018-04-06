@@ -11,5 +11,5 @@ interface HasName {
 }
 
 export function byName(a: HasName, b: HasName) {
-  return a.name.localeCompare(b.name)
+  return a.name.trim().localeCompare(b.name.trim());
 }

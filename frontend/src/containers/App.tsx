@@ -41,7 +41,7 @@ function compareArtists(a: Artist, b: Artist) {
     return 1;
   }
 
-  return a.name.localeCompare(b.name);
+  return a.name.trim().localeCompare(b.name.trim());
 }
 
 function compareLabels(a: Label, b: Label) {
@@ -61,7 +61,7 @@ function compareLabels(a: Label, b: Label) {
     return 1;
   }
 
-  return a.name.localeCompare(b.name);
+  return a.name.trim().localeCompare(b.name.trim());
 }
 
 function byTrackAndDiscPosition(a: Track, b: Track) {

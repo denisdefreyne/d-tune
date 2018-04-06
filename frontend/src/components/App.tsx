@@ -127,7 +127,7 @@ interface ArtistRowProps {
 
 const ArtistRow = (props: ArtistRowProps) => {
   const restProps = props.selectedArtist && props.artist.id === props.selectedArtist.id ? { isSelected: true } : null;
-  return <PickListItem {...restProps} isSpecial={false} onClick={(e) => props.onArtistSelected(props.artist)} isPlaying={props.playingTrack ? props.playingTrack.track.album.artist.id === props.artist.id : false}>{props.artist.name}</PickListItem>;
+  return <PickListItem {...restProps} isSpecial={props.artist.isSpecial} onClick={(e) => props.onArtistSelected(props.artist)} isPlaying={props.playingTrack ? props.playingTrack.track.album.artist.id === props.artist.id : false}>{props.artist.name}</PickListItem>;
 };
 
 interface AlbumRowProps {

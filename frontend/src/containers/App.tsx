@@ -7,7 +7,7 @@ import authenticated, { InjectedProps as AuthenticatedProps } from "../hoc/Authe
 import API, { TrackDetailsResponse } from "../services/api";
 
 import Album from "../types/album";
-import Artist from "../types/artist";
+import Artist, { SpecialID as SpecialArtistID } from "../types/artist";
 import Label, { SpecialID as SpecialLabelID } from "../types/label";
 import Library from "../types/library";
 import PlayingTrack from "../types/playing_track";
@@ -31,6 +31,18 @@ interface AppContainerProps {
 }
 
 // Utils
+
+function compareArtists(a: Artist, b: Artist) {
+  if (a.id === SpecialArtistID.ANY) {
+    return -1;
+  }
+
+  if (b.id === SpecialArtistID.ANY) {
+    return 1;
+  }
+
+  return a.name.localeCompare(b.name);
+}
 
 function compareLabels(a: Label, b: Label) {
   if (a.id === SpecialLabelID.ANY) {
@@ -88,10 +100,16 @@ class AppContainer extends React.Component<AppContainerProps & AuthenticatedProp
       { isSpecial: true, id: SpecialLabelID.ANY, name: "(any)" },
       { isSpecial: true, id: SpecialLabelID.NONE, name: "(none)" },
     ];
-
     const labels = library.labels.concat(specialLabels);
 
-    this.setState({ library: {...library, labels} });
+    const specialArtists = [
+      { isSpecial: true, id: SpecialArtistID.ANY, name: "(any)" },
+    ];
+    const artists = library.artists.concat(specialArtists);
+
+    this.setState({
+      library: {...library, labels, artists},
+    });
   }
 
   public onFetchFailure = () => {
@@ -188,13 +206,14 @@ class AppContainer extends React.Component<AppContainerProps & AuthenticatedProp
     this.artistsForAlbums(this.albumsForLabel(label))
 
   public artistsForAlbums = (albums: Album[]): Artist[] =>
-    uniq(albums.map((a) => a.artist_id))
-      .map((artistID) => this.state.library.artists.find((a) => a.id === artistID))
-      .filter(isNotUndefined)
+    [this.state.library.artists.find((a) => a.id === SpecialArtistID.ANY)!].concat(
+      uniq(albums.map((a) => a.artist_id))
+        .map((artistID) => this.state.library.artists.find((a) => a.id === artistID))
+        .filter(isNotUndefined))
 
   public albumsForLabelAndArtist = (label: Label, artist: Artist): Album[] =>
     this.state.library.albums
-      .filter((a) => this.isLabelOnAlbum(a, label) && a.artist_id === artist.id)
+      .filter((a) => this.isLabelOnAlbum(a, label) && (artist.id === SpecialArtistID.ANY || a.artist_id === artist.id))
 
   public tracksForAlbum = (album: Album): Track[] =>
     this.state.library.tracks.filter((t) => t.album_id === album.id)
@@ -206,7 +225,7 @@ class AppContainer extends React.Component<AppContainerProps & AuthenticatedProp
 
   public artistsToShow = (): Artist[] =>
     this.state.selectedLabel
-      ? this.artistsForLabel(this.state.selectedLabel).sort(byName)
+      ? this.artistsForLabel(this.state.selectedLabel).sort(compareArtists)
       : []
 
   public albumsToShow = (): Album[] =>

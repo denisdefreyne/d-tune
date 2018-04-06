@@ -2,7 +2,7 @@ import * as React from "react";
 import * as styledComponents from "styled-components";
 
 import Album from "../types/album";
-import Artist from "../types/artist";
+import Artist, { SpecialID as SpecialArtistID } from "../types/artist";
 import Label from "../types/label";
 import PlayingTrack from "../types/playing_track";
 import Track from "../types/track";
@@ -132,6 +132,7 @@ const ArtistRow = (props: ArtistRowProps) => {
 
 interface AlbumRowProps {
   selectedAlbum: Album | null;
+  selectedArtist: Artist | null;
   album: Album;
   onAlbumSelected: (album: Album) => void;
   playingTrack: PlayingTrack | null;
@@ -139,7 +140,14 @@ interface AlbumRowProps {
 
 const AlbumRow = (props: AlbumRowProps) => {
   const restProps = props.selectedAlbum && props.album.id === props.selectedAlbum.id ? { isSelected: true } : null;
-  return <PickListItem {...restProps} onClick={(e) => props.onAlbumSelected(props.album)} isPlaying={props.playingTrack ? props.playingTrack.track.album.id === props.album.id : false}>{props.album.name}</PickListItem>;
+  return (
+    <PickListItem {...restProps} onClick={(e) => props.onAlbumSelected(props.album)} isPlaying={props.playingTrack ? props.playingTrack.track.album.id === props.album.id : false}>
+      {props.album.name}
+      {props.selectedArtist && props.selectedArtist.id === SpecialArtistID.ANY
+          ? <PickListSubtitle>{props.album.artist.name}</PickListSubtitle>
+          : null}
+    </PickListItem>
+  );
 };
 
 interface TrackRowProps {
@@ -200,6 +208,7 @@ const ArtistsCol = (props: ArtistsColProps) => (
 interface AlbumsColProps {
   albums: Album[];
   selectedAlbum: Album | null;
+  selectedArtist: Artist | null;
   onAlbumSelected: (album: Album) => void;
   playingTrack: PlayingTrack | null;
 }
@@ -210,7 +219,7 @@ const AlbumsCol = (props: AlbumsColProps) => (
     <PickList>
       {
         props.albums
-          ? props.albums.map((a) => <AlbumRow key={a.id} album={a} selectedAlbum={props.selectedAlbum} onAlbumSelected={props.onAlbumSelected} playingTrack={props.playingTrack} />)
+          ? props.albums.map((a) => <AlbumRow key={a.id} album={a} selectedAlbum={props.selectedAlbum} selectedArtist={props.selectedArtist} onAlbumSelected={props.onAlbumSelected} playingTrack={props.playingTrack} />)
           : null
       }
     </PickList>

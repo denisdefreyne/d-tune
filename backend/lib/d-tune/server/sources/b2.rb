@@ -23,23 +23,32 @@ module DTune
         end
 
         def connect
-          client = DTune::Util::B2Client.new(
+          @client = DTune::Util::B2Client.new(
             account_id: @account_id,
             application_key: @application_key
           )
 
-          @conn = client.connect
-          @bucket = @conn.buckets.find { |b| b[:name] == @bucket_name }
+          @bucket_f =
+            @client.connect.map do |conn|
+              puts "[#{self.class}] Finding bucket…"
+              bucket = conn.buckets.find { |b| b[:name] == @bucket_name }
+              puts "[#{self.class}] Found bucket"
+              bucket
+            end
         end
 
         def make_download_url(filename)
-          await_connection
-
-          @conn.authorize_download(
-            bucket_id: @bucket[:id],
-            bucket_name: @bucket[:name],
-            filename: @prefix + filename
-          )
+          puts "[#{self.class}] Making download URL…"
+          bucket = @bucket_f.await
+          url = @client.connect.map do |conn|
+            conn.authorize_download(
+              bucket_id: bucket[:id],
+              bucket_name: bucket[:name],
+              filename: @prefix + filename
+            )
+          end.await
+          puts "[#{self.class}] Made download URL"
+          url
         end
       end
     end

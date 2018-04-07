@@ -11,29 +11,35 @@ module DTune
       end
 
       def connect
-        connection = Excon.new(
-          B2_BASE_URL,
-          persistent: true
-        )
+        DTune::Util::Future.new do
+          puts "[#{self.class}] Connecting…"
 
-        response = connection.get(
-          path: '/b2api/v1/b2_authorize_account',
-          user: @account_id,
-          password: @application_key
-        )
+          connection = Excon.new(
+            B2_BASE_URL,
+            persistent: true
+          )
 
-        raise "invalid response: #{response.inspect}" if response.status != 200
+          response = connection.get(
+            path: '/b2api/v1/b2_authorize_account',
+            user: @account_id,
+            password: @application_key
+          )
 
-        body = JSON.parse(response.body)
+          raise "invalid response: #{response.inspect}" if response.status != 200
 
-        auth_token = body.fetch('authorizationToken')
-        api_url = body.fetch('apiUrl')
+          body = JSON.parse(response.body)
 
-        DTune::Util::B2Connection.new(
-          account_id: @account_id,
-          api_url: api_url,
-          auth_token: auth_token
-        )
+          auth_token = body.fetch('authorizationToken')
+          api_url = body.fetch('apiUrl')
+
+          conn = DTune::Util::B2Connection.new(
+            account_id: @account_id,
+            api_url: api_url,
+            auth_token: auth_token
+          )
+          puts "[#{self.class}] Connected"
+          conn
+        end
       end
     end
   end

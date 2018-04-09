@@ -85,6 +85,41 @@
     content: "🔊 ▶";
 }
 
+.player {
+    position: relative;
+}
+
+.playerControls {
+    position: absolute;
+
+    text-align: center;
+
+    top: 9px;
+    right: 230px;
+    width: 20px;
+    height: 20px;
+
+    border: none;
+    background: #fff;
+}
+
+.playerProgress {
+    position: absolute;
+
+    top: 13px;
+    right: 15px;
+    width: 200px;
+
+    appearance: none;
+
+    background: #fff;
+    border: 1px solid #000;
+}
+
+.playerProgress::-moz-progress-bar {
+    background: #000;
+}
+
 .title {
     margin: 0;
 

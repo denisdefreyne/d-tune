@@ -14,9 +14,6 @@ const {
   default: styled,
 } = styledComponents;
 
-const Page = styled.div`
-`;
-
 const H1 = styled.h1`
   margin: 0;
 
@@ -333,17 +330,15 @@ const Player = (props: PlayerProps) => (
 );
 
 const App = (props: AppProps) => (
-  <Page>
-    <Grid>
-      <H1>D★<b>Tune</b></H1>
-      <LabelsCol {...props} />
-      <ArtistsCol {...props} />
-      <AlbumsCol {...props} />
-      <TracksCol {...props} />
-      <TrackCol {...props} />
-      <Player {...props} />
-    </Grid>
-  </Page>
+  <Grid>
+    <H1>D★<b>Tune</b></H1>
+    <LabelsCol {...props} />
+    <ArtistsCol {...props} />
+    <AlbumsCol {...props} />
+    <TracksCol {...props} />
+    <TrackCol {...props} />
+    <Player {...props} />
+  </Grid>
 );
 
 export interface AppProps {

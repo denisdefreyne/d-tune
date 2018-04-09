@@ -20,6 +20,7 @@ import {
   StatusBox,
   Title,
 } from "./common";
+import { Player } from "./Player";
 
 interface LabelRowProps {
   selectedLabel: Label | null;
@@ -201,50 +202,6 @@ const TrackCol = (props: TrackColProps) => (
       { props.selectedTrack ? <TrackDetails track={props.selectedTrack} onTrackPlayButtonClicked={props.onTrackPlayButtonClicked} /> : null }
     </DetailBox>
   </Col>
-);
-
-interface ActivePlayerProps {
-  onPlaybackEnded: (t: PlayingTrack) => void;
-  playingTrack: PlayingTrack;
-}
-
-const ActivePlayer = (props: ActivePlayerProps) => (
-  <div>
-    {
-      props.playingTrack.mediaURL
-        ? <audio
-            style={{ float: "right", width: "500px" }}
-            controls
-            autoPlay
-            onEnded={() => props.onPlaybackEnded(props.playingTrack)}
-            src={props.playingTrack.mediaURL}
-          />
-        : "…"
-    }
-    <MiniTitle>Now playing</MiniTitle><br />
-    {props.playingTrack.track.artist.name} – {props.playingTrack.track.name}
-  </div>
-);
-
-const IdlePlayer = () => (
-  <div>
-    <MiniTitle>Now playing</MiniTitle><br />Nothing playing right now
-  </div>
-);
-
-interface PlayerProps {
-  onPlaybackEnded: (t: PlayingTrack) => void;
-  playingTrack: PlayingTrack | null;
-}
-
-const Player = (props: PlayerProps) => (
-  <StatusBox>
-    {
-      props.playingTrack
-        ? <ActivePlayer playingTrack={props.playingTrack} onPlaybackEnded={props.onPlaybackEnded} />
-        : <IdlePlayer />
-    }
-  </StatusBox>
 );
 
 const App = (props: AppProps) => (

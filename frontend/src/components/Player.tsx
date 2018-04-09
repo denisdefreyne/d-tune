@@ -7,18 +7,38 @@ interface ActivePlayerProps {
   playingTrack: PlayingTrack;
 }
 
+interface LoadedAudioElementProps {
+  onPlaybackEnded: (t: PlayingTrack) => void;
+  mediaURL: string;
+  playingTrack: PlayingTrack;
+}
+
+const LoadedAudioElement = (props: LoadedAudioElementProps) => (
+  <audio
+    style={{ float: "right", width: "500px" }}
+    controls
+    autoPlay
+    onEnded={() => props.onPlaybackEnded(props.playingTrack)}
+    src={props.mediaURL}
+  />
+);
+
+const LoadingAudioElement = () => (
+  <span
+    style={{ float: "right", width: "500px", textAlign: "right", padding: "10px" }}
+  >…</span>
+);
+
 const ActivePlayer = (props: ActivePlayerProps) => (
   <div>
     {
       props.playingTrack.mediaURL
-        ? <audio
-          style={{ float: "right", width: "500px" }}
-          controls
-          autoPlay
-          onEnded={() => props.onPlaybackEnded(props.playingTrack)}
-          src={props.playingTrack.mediaURL}
-        />
-        : "…"
+        ? <LoadedAudioElement
+            onPlaybackEnded={props.onPlaybackEnded}
+            mediaURL={props.playingTrack.mediaURL}
+            playingTrack={props.playingTrack}
+          />
+        : <LoadingAudioElement />
     }
     <MiniTitle>Now playing</MiniTitle><br />
     {props.playingTrack.track.artist.name} – {props.playingTrack.track.name}

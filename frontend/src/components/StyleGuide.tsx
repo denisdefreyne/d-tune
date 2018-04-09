@@ -44,9 +44,13 @@ const track = {
   album,
 };
 
-const playingTrack = {
+const playingTrackWithMedia = {
   track,
   mediaURL: "http://example.com/song.mp3",
+};
+
+const playingTrackWithoutMedia = {
+  track,
 };
 
 const StyleGuide = (props: {}) => (
@@ -55,7 +59,10 @@ const StyleGuide = (props: {}) => (
       <Player playingTrack={null} onPlaybackEnded={() => null} />
     </div>
     <div style={{ margin: "40px" }}>
-      <Player playingTrack={playingTrack} onPlaybackEnded={() => null} />
+      <Player playingTrack={playingTrackWithMedia} onPlaybackEnded={() => null} />
+    </div>
+    <div style={{ margin: "40px" }}>
+      <Player playingTrack={playingTrackWithoutMedia} onPlaybackEnded={() => null} />
     </div>
   </React.Fragment>
 );

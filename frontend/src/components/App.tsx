@@ -7,21 +7,12 @@ import Label from "../types/label";
 import PlayingTrack from "../types/playing_track";
 import Track from "../types/track";
 
-import { Button, PickListItem, StatusBox } from "./common";
+import { Button, PickListItem, StatusBox, Title } from "./common";
 import * as style from "./style.css";
 
 const {
   default: styled,
 } = styledComponents;
-
-const H1 = styled.h1`
-  margin: 0;
-
-  font-style: italic;
-  font-weight: 500;
-
-  grid-column: 1 / -1;
-`;
 
 const Grid = styled.div`
   display: grid;
@@ -331,7 +322,7 @@ const Player = (props: PlayerProps) => (
 
 const App = (props: AppProps) => (
   <Grid>
-    <H1>D★<b>Tune</b></H1>
+    <Title />
     <LabelsCol {...props} />
     <ArtistsCol {...props} />
     <AlbumsCol {...props} />

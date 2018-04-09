@@ -39,3 +39,6 @@ export const PickListItem = (props: PickListItemProps) => (
     {props.children}
   </li>
 );
+
+export const Title = (props: {}) =>
+  <div className={style.title}>D★<b>Tune</b></div>;

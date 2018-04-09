@@ -84,3 +84,13 @@
 .pickListItem.isNotLast.isPlaying::before {
     content: "🔊 ▶";
 }
+
+.title {
+    margin: 0;
+
+    font-size: 28px;
+    font-style: italic;
+    font-weight: 500;
+
+    grid-column: 1 / -1;
+}

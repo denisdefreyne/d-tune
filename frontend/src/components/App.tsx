@@ -7,92 +7,19 @@ import Label from "../types/label";
 import PlayingTrack from "../types/playing_track";
 import Track from "../types/track";
 
-import { Button, PickListItem, StatusBox, Title } from "./common";
-import * as style from "./style.css";
-
-const {
-  default: styled,
-} = styledComponents;
-
-const Grid = styled.div`
-  display: grid;
-
-  position: relative;
-
-  height: calc(100vh - 2*15px);
-  padding: 15px;
-
-  grid-template-columns: calc(20% - 12px) calc(20% - 12px) calc(20% - 12px) calc(20% - 12px) calc(20% - 12px);
-  grid-template-rows: auto 1fr auto;
-  grid-gap: 15px;
-
-  justify-content: space-between;
-`;
-
-const Col = styled.div`
-  position: relative;
-`;
-
-const MiniTitle = styled.span`
-  text-transform: uppercase;
-
-  font-weight: normal;
-  font-size: 12px;
-`;
-
-const ColTitle = styled.h2`
-  text-transform: uppercase;
-
-  font-weight: normal;
-  font-size: 12px;
-
-  margin: 0 0 5px 5px;
-  padding: 0;
-`;
-
-const PickList = styled.ul`
-  border: 1px solid #000;
-
-  box-shadow: 3px 3px 0 #ccc;
-
-  padding: 3px 0;
-
-  overflow-x: hidden;
-  overflow-y: scroll;
-
-  position: absolute;
-  top: 20px;
-  bottom: 0;
-  right: 0;
-  left: 0;
-`;
-
-const DetailBox = styled.div`
-  border: 1px solid #000;
-
-  box-shadow: 3px 3px 0 #ccc;
-
-  padding: 10px;
-
-  overflow-x: hidden;
-  overflow-y: scroll;
-
-  position: absolute;
-  top: 20px;
-  bottom: 0;
-  right: 0;
-  left: 0;
-`;
-
-const PickListSubtitle = styled.div`
-  font-style: italic;
-
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-`;
-
-// -----------------------------------------------------------------------------
+import {
+  Button,
+  Col,
+  ColTitle,
+  DetailBox,
+  Grid,
+  MiniTitle,
+  PickList,
+  PickListItem,
+  PickListSubtitle,
+  StatusBox,
+  Title,
+} from "./common";
 
 interface LabelRowProps {
   selectedLabel: Label | null;

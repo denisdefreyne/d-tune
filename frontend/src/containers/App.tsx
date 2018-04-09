@@ -1,6 +1,8 @@
+import * as queryString from "query-string";
 import * as React from "react";
 
 import App, { AppProps } from "../components/App";
+import StyleGuide from "../components/StyleGuide";
 
 import authenticated, { InjectedProps as AuthenticatedProps } from "../hoc/Authenticated";
 
@@ -15,8 +17,15 @@ import Track from "../types/track";
 
 import { byName, isNotUndefined, uniq } from "../util";
 
+enum WhatToShow {
+  Library,
+  StyleGuide,
+}
+
 interface AppState {
   library: Library;
+
+  whatToShow: WhatToShow;
 
   selectedLabel: Label | null;
   selectedArtist: Artist | null;
@@ -75,6 +84,8 @@ class AppContainer extends React.Component<AppContainerProps & AuthenticatedProp
     super(props);
 
     this.state = {
+      whatToShow: WhatToShow.Library,
+
       library: {
         labels: [],
         artists: [],
@@ -92,7 +103,12 @@ class AppContainer extends React.Component<AppContainerProps & AuthenticatedProp
   }
 
   public componentDidMount() {
-    API.fetchEverything(this.props.baseURL, this.props.getIdToken(), this.onFetchSuccess, this.onFetchFailure);
+    const query = queryString.parse(window.location.search);
+    if (query.page === "style-guide") {
+      this.setState({ whatToShow: WhatToShow.StyleGuide });
+    } else {
+      API.fetchEverything(this.props.baseURL, this.props.getIdToken(), this.onFetchSuccess, this.onFetchFailure);
+    }
   }
 
   public onFetchSuccess = (library: Library) => {
@@ -242,27 +258,29 @@ class AppContainer extends React.Component<AppContainerProps & AuthenticatedProp
 
   public render() {
     return (
-      <App
-        labels={this.labelsToShow()}
-        artists={this.artistsToShow()}
-        albums={this.albumsToShow()}
-        tracks={this.tracksToShow()}
+      this.state.whatToShow === WhatToShow.StyleGuide
+        ? <StyleGuide />
+        : <App
+          labels={this.labelsToShow()}
+          artists={this.artistsToShow()}
+          albums={this.albumsToShow()}
+          tracks={this.tracksToShow()}
 
-        selectedLabel={this.state.selectedLabel}
-        selectedArtist={this.state.selectedArtist}
-        selectedAlbum={this.state.selectedAlbum}
-        selectedTrack={this.state.selectedTrack}
+          selectedLabel={this.state.selectedLabel}
+          selectedArtist={this.state.selectedArtist}
+          selectedAlbum={this.state.selectedAlbum}
+          selectedTrack={this.state.selectedTrack}
 
-        onLabelSelected={this.onLabelSelected}
-        onArtistSelected={this.onArtistSelected}
-        onAlbumSelected={this.onAlbumSelected}
-        onTrackSelected={this.onTrackSelected}
+          onLabelSelected={this.onLabelSelected}
+          onArtistSelected={this.onArtistSelected}
+          onAlbumSelected={this.onAlbumSelected}
+          onTrackSelected={this.onTrackSelected}
 
-        onTrackPlayButtonClicked={this.onTrackPlayButtonClicked}
-        playingTrack={this.state.playingTrack}
+          onTrackPlayButtonClicked={this.onTrackPlayButtonClicked}
+          playingTrack={this.state.playingTrack}
 
-        onPlaybackEnded={this.onPlaybackEnded}
-      />
+          onPlaybackEnded={this.onPlaybackEnded}
+        />
     );
   }
 }

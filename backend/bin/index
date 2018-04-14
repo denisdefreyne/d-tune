@@ -2,6 +2,7 @@
 # frozen_string_literal: true
 
 require 'optparse'
+require 'tempfile'
 
 require_relative '../lib/d-tune/indexer'
 
@@ -11,8 +12,8 @@ options = {}
 OptionParser.new do |opts|
   opts.banner = usage
 
-  opts.on('-c PATH', '--csv-path=PATH', 'Specify path to CSV file') do |v|
-    options[:csv_path] = v
+  opts.on('-m PATH', '--music-dir-path=PATH', 'Specify path to music directory') do |v|
+    options[:music_dir_path] = v
   end
 
   opts.on('-d PATH', '--db-path=PATH', 'Specify path to database') do |v|
@@ -25,8 +26,8 @@ OptionParser.new do |opts|
   end
 end.parse!
 
-unless options.key?(:csv_path)
-  warn 'Error: CSV path not specified'
+unless options.key?(:music_dir_path)
+  warn 'Error: Music path not specified'
   exit 1
 end
 
@@ -35,13 +36,22 @@ unless options.key?(:db_path)
   exit 1
 end
 
-case ARGV
-when []
-  DTune::Indexer::Importer.new(
-    input_file_path: options[:csv_path],
-    output_file_path: options[:db_path]
-  ).run
-else
+unless ARGV.empty?
   warn usage
   exit 1
+end
+
+Tempfile.create('d-tune-import.csv') do |f|
+  f.close
+
+  DTune::Indexer::Fetcher.new(
+    input_directory_path: options[:music_dir_path],
+    output_file_path: f.path,
+    parallelism: 10
+  ).run
+
+  DTune::Indexer::Importer.new(
+    input_file_path: f.path,
+    output_file_path: options[:db_path]
+  ).run
 end

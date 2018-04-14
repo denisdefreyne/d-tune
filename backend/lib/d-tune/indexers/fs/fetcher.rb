@@ -11,8 +11,8 @@ module DTune
 
       def run
         filenames =
-          DTune::Indexer::ProgressLogger.new(
-            enum: DTune::Indexer::FileFinder.new(
+          DTune::Util::ProgressLogger.new(
+            enum: DTune::Util::FileFinder.new(
               prefix: @input_directory_path,
               extensions: ['.mp3', '.m4a']
             ).each,
@@ -22,7 +22,7 @@ module DTune
         sanitizer = DTune::Indexer::Sanitizer.new
         parser = DTune::Indexer::Parser.new
         mapper =
-          DTune::Indexer::ParallelMapper.new(enum: filenames, parallelism: @parallelism) do |fn|
+          DTune::Util::ParallelMapper.new(enum: filenames, parallelism: @parallelism) do |fn|
             {
               filename: fn.delete_prefix(@input_directory_path).delete_prefix('/'),
               properties: sanitizer.call(parser.parse_file(fn))

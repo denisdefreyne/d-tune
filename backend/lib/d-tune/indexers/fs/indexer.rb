@@ -13,9 +13,12 @@ module DTune
   end
 end
 
-require_relative 'file_finder'
-require_relative 'progress_logger'
-require_relative 'parallel_mapper'
+module DTune
+  module Indexers
+    FS = DTune::Indexer
+  end
+end
+
 require_relative 'parser'
 require_relative 'fetcher'
 require_relative 'importer'

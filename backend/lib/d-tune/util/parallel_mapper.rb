@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module DTune
-  module Indexer
+  module Util
     class ParallelMapper
       def initialize(enum:, parallelism:, &block)
         @enum = enum

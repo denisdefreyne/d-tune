@@ -17,4 +17,3 @@ end
 require_relative 'd-tune/util'
 
 require_relative 'd-tune/server'
-require_relative 'd-tune/indexer'

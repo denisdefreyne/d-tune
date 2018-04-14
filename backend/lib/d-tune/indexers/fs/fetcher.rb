@@ -38,9 +38,9 @@ module DTune
             e[:properties].slice(*PROPERTIES).merge(e.slice(:filename, :mtime))
           end
 
-          DTune::Indexers::FS::Importer.new(
-            output_file_path: @output_file_path
-          ).run(rows)
+          DTune::Indexers::FS::DB.new(path: @output_file_path).connect do |db|
+            DTune::Indexers::FS::Importer.new(db: db).run(rows)
+          end
         end
       end
     end

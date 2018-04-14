@@ -4,29 +4,27 @@ module DTune
   module Indexers
     module FS
       class Importer
-        def initialize(output_file_path:)
-          @output_file_path = output_file_path
+        def initialize(db:)
+          @db = db
         end
 
         def run(enum)
-          connect do |db|
-            puts 'Importing raw data…'
-            import_raw(enum, db)
+          puts 'Importing raw data…'
+          import_raw(enum, @db)
 
-            puts 'Importing artists…'
-            import_artists(db)
+          puts 'Importing artists…'
+          import_artists(@db)
 
-            puts 'Importing labels…'
-            import_labels(db)
+          puts 'Importing labels…'
+          import_labels(@db)
 
-            puts 'Importing albums…'
-            import_albums(db)
+          puts 'Importing albums…'
+          import_albums(@db)
 
-            puts 'Importing tracks…'
-            import_tracks(db)
+          puts 'Importing tracks…'
+          import_tracks(@db)
 
-            puts 'Done'
-          end
+          puts 'Done'
         end
 
         private
@@ -137,13 +135,6 @@ module DTune
 
         def normalize_string(str)
           str.nil? || str.empty? ? nil : str
-        end
-
-        def connect
-          FileUtils.rm_f(@output_file_path)
-          Sequel.connect('sqlite://' + @output_file_path) do |db|
-            yield(db)
-          end
         end
 
         def import_raw(enum, db)

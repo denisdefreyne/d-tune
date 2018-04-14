@@ -21,6 +21,7 @@ module DTune
   end
 end
 
+require_relative 'fs/db'
 require_relative 'fs/parser'
 require_relative 'fs/fetcher'
 require_relative 'fs/importer'

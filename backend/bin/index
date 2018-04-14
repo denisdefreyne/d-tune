@@ -42,17 +42,7 @@ unless ARGV.empty?
   exit 1
 end
 
-Tempfile.create('d-tune-import.csv') do |f|
-  f.close
-
-  DTune::Indexers::FS::Fetcher.new(
-    input_directory_path: options[:music_dir_path],
-    output_file_path: f.path,
-    parallelism: 10
-  ).run
-
-  DTune::Indexers::FS::Importer.new(
-    input_file_path: f.path,
-    output_file_path: options[:db_path]
-  ).run
-end
+DTune::Indexers::FS.call(
+  source: options[:music_dir_path],
+  target: options[:db_path]
+)

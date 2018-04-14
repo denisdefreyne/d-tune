@@ -34,7 +34,7 @@ module DTune
             body JSON.dump(reason: 'You are not Denis.')
             halt 403
           end
-        rescue GoogleIDToken::ValidationError => e
+        rescue GoogleIDToken::ValidationError
           body JSON.dump(reason: 'Your token is invalid.')
           halt 403
         end

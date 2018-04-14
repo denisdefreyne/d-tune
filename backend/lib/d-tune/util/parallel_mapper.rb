@@ -38,6 +38,12 @@ module DTune
         threads.each(&:join)
         q_thread.join
       end
+
+      def map
+        Enumerator.new do |y|
+          each { |e| y << yield(e) }
+        end.lazy
+      end
     end
   end
 end

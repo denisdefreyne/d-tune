@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'csv'
 require 'fileutils'
 require 'find'
 require 'sequel'
@@ -12,20 +11,11 @@ module DTune
   module Indexers
     module FS
       def self.call(source:, target:)
-        Tempfile.create('d-tune-import.csv') do |f|
-          f.close
-
-          DTune::Indexers::FS::Fetcher.new(
-            input_directory_path: source,
-            output_file_path: f.path,
-            parallelism: 10
-          ).run
-
-          DTune::Indexers::FS::Importer.new(
-            input_file_path: f.path,
-            output_file_path: target
-          ).run
-        end
+        DTune::Indexers::FS::Fetcher.new(
+          input_directory_path: source,
+          output_file_path: target,
+          parallelism: 10
+        ).run
       end
     end
   end

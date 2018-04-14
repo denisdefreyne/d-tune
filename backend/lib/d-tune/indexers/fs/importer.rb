@@ -4,35 +4,34 @@ module DTune
   module Indexers
     module FS
       class Importer
-        def initialize(input_file_path:, output_file_path:)
-          @input_file_path = input_file_path
+        def initialize(output_file_path:)
           @output_file_path = output_file_path
         end
 
-        def run
-          puts 'Importing raw data…'
-          import_raw do |raw_table|
-            connect do |db|
-              puts 'Importing artists…'
-              import_artists(raw_table, db)
+        def run(enum)
+          connect do |db|
+            puts 'Importing raw data…'
+            import_raw(enum, db)
 
-              puts 'Importing labels…'
-              import_labels(raw_table, db)
+            puts 'Importing artists…'
+            import_artists(db)
 
-              puts 'Importing albums…'
-              import_albums(raw_table, db)
+            puts 'Importing labels…'
+            import_labels(db)
 
-              puts 'Importing tracks…'
-              import_tracks(raw_table, db)
+            puts 'Importing albums…'
+            import_albums(db)
 
-              puts 'Done'
-            end
+            puts 'Importing tracks…'
+            import_tracks(db)
+
+            puts 'Done'
           end
         end
 
         private
 
-        def import_artists(raw_table, db)
+        def import_artists(db)
           db.create_table(:artists) do
             primary_key :id
             String :name
@@ -41,14 +40,14 @@ module DTune
 
           artists_table = db.from(:artists)
 
-          album_artists = raw_table.distinct.select_map(:album_artist)
-          artists = raw_table.distinct.select_map(:artist)
+          album_artists = db.from(:raw).distinct.select_map(:album_artist)
+          artists = db.from(:raw).distinct.select_map(:artist)
           (artists + album_artists).uniq.each do |artist|
             artists_table.insert(name: artist)
           end
         end
 
-        def import_labels(raw_table, db)
+        def import_labels(db)
           db.create_table(:labels) do
             primary_key :id
             String :name
@@ -58,13 +57,13 @@ module DTune
 
           labels_table = db.from(:labels)
 
-          labels = raw_table.distinct.select_map(:label).reject { |l| l.nil? || l.empty? }
+          labels = db.from(:raw).distinct.select_map(:label).reject { |l| l.nil? || l.empty? }
           labels.uniq.each do |label|
             labels_table.insert(name: label)
           end
         end
 
-        def import_albums(raw_table, db)
+        def import_albums(db)
           db.create_table(:albums) do
             primary_key :id
             String :name
@@ -78,7 +77,7 @@ module DTune
           artists_table = db.from(:artists)
           labels_table = db.from(:labels)
 
-          rows = raw_table.distinct.select(:album, :artist, :album_artist, :label)
+          rows = db.from(:raw).distinct.select(:album, :artist, :album_artist, :label)
           rows.each do |row|
             album_artist = normalize_string(row[:album_artist]) || row[:artist]
             label = row[:label]
@@ -90,7 +89,7 @@ module DTune
           end
         end
 
-        def import_tracks(raw_table, db)
+        def import_tracks(db)
           db.create_table(:tracks) do
             primary_key :id
             String :name
@@ -113,7 +112,7 @@ module DTune
           albums_table = db.from(:albums)
           artists_table = db.from(:artists)
 
-          raw_table.each do |row|
+          db.from(:raw).each do |row|
             artist_name = normalize_string(row[:artist]) || row[:album_artist]
             album_artist_name = normalize_string(row[:album_artist]) || row[:artist]
 
@@ -147,34 +146,27 @@ module DTune
           end
         end
 
-        def import_raw
-          Dir.mktmpdir do |dir|
-            url = "sqlite://#{dir}/b2player-raw.db"
-            Sequel.connect(url) do |db|
-              db.create_table(:raw) do
-                String :filename
-                String :track_position
-                String :disc_position
-                String :artist
-                String :album_artist
-                String :album
-                String :title
-                String :recording_time
-                String :label
-                String :isrc
-                String :musicbrainz_id
-                Integer :compilation
-                Float :duration
-              end
+        def import_raw(enum, db)
+          db.create_table(:raw) do
+            String :filename
+            Integer :mtime
+            String :track_position
+            String :disc_position
+            String :artist
+            String :album_artist
+            String :album
+            String :title
+            String :recording_time
+            String :label
+            String :isrc
+            String :musicbrainz_id
+            Integer :compilation
+            Float :duration
+          end
 
-              raw_table = db.from(:raw)
-
-              CSV.foreach(@input_file_path, headers: true) do |row|
-                raw_table.insert(row.to_h)
-              end
-
-              yield(raw_table)
-            end
+          raw_table = db.from(:raw)
+          enum.each do |e|
+            raw_table.insert(e.to_h)
           end
         end
       end

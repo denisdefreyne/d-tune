@@ -9,13 +9,9 @@ require 'taglib'
 require 'tmpdir'
 
 module DTune
-  module Indexer
-  end
-end
-
-module DTune
   module Indexers
-    FS = DTune::Indexer
+    module FS
+    end
   end
 end
 

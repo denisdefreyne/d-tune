@@ -2,9 +2,9 @@ GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.0)
-    backports (3.11.1)
+    backports (3.11.3)
     ddplugin (1.0.2)
-    dotenv (2.2.1)
+    dotenv (2.4.0)
     excon (0.62.0)
     google-id-token (1.4.2)
       jwt (>= 1)
@@ -13,16 +13,16 @@ GEM
     multi_json (1.13.1)
     mustermann (1.0.2)
     parallel (1.12.1)
-    parser (2.5.0.5)
+    parser (2.5.1.0)
       ast (~> 2.4.0)
     powerpack (0.1.1)
-    puma (3.11.3)
-    rack (2.0.4)
+    puma (3.11.4)
+    rack (2.0.5)
     rack-cors (1.0.2)
     rack-protection (2.0.1)
       rack
     rainbow (3.0.0)
-    rubocop (0.54.0)
+    rubocop (0.55.0)
       parallel (~> 1.10)
       parser (>= 2.5)
       powerpack (~> 0.1)
@@ -30,7 +30,7 @@ GEM
       ruby-progressbar (~> 1.7)
       unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-progressbar (1.9.0)
-    sequel (5.7.1)
+    sequel (5.8.0)
     sinatra (2.0.1)
       mustermann (~> 1.0)
       rack (~> 2.0)
@@ -47,7 +47,7 @@ GEM
     sqlite3 (1.3.13)
     taglib-ruby (0.7.1)
     tilt (2.0.8)
-    unicode-display_width (1.3.0)
+    unicode-display_width (1.3.2)
 
 PLATFORMS
   ruby

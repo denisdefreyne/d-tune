@@ -5,7 +5,7 @@ module DTune
     module FS
       class Fetcher
         PROPERTIES =
-          %i[track_position disc_position artist album_artist album title recording_time compilation label isrc musicbrainz_id duration]
+          %i[track_position disc_position artist album_artist album title recording_time compilation label isrc musicbrainz_id duration].freeze
 
         def initialize(input_directory_path:, output_file_path:, parallelism:)
           @input_directory_path = input_directory_path

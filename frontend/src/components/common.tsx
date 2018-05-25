@@ -56,7 +56,7 @@ export const Grid = styled.div`
   height: calc(100vh - 2*15px);
   padding: 15px;
 
-  grid-template-columns: calc(20% - 12px) calc(20% - 12px) calc(20% - 12px) calc(20% - 12px) calc(20% - 12px);
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   grid-template-rows: auto 1fr auto;
   grid-gap: 15px;
 

@@ -22,7 +22,7 @@ GEM
     rack-protection (2.0.1)
       rack
     rainbow (3.0.0)
-    rubocop (0.55.0)
+    rubocop (0.56.0)
       parallel (~> 1.10)
       parser (>= 2.5)
       powerpack (~> 0.1)
@@ -69,4 +69,4 @@ DEPENDENCIES
   taglib-ruby
 
 BUNDLED WITH
-   1.16.1
+   1.16.2

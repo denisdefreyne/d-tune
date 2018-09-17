@@ -46,7 +46,7 @@ const track = {
 
 const playingTrackWithMedia = {
   track,
-  mediaURL: "https://upload.wikimedia.org/wikipedia/commons/1/19/Blackleg_-_Smoke_Test_%28excerpt%29.ogg",
+  mediaURL: "http://example.com/song.mp3",
 };
 
 const playingTrackWithoutMedia = {

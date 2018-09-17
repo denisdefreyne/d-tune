@@ -50,7 +50,7 @@ module DTune
 
             mbid_strings = (item_list_map['----:com.apple.iTunes:MusicBrainz Track Id']&.to_string_list || [])
 
-            label_strings = (item_list_map['----:com.apple.iTunes:LABEL']&.to_string_list || [])
+            label_strings = (item_list_map['----:com.apple.iTunes:Label']&.to_string_list || [])
 
             {
               track_position:     item_list_map['trkn']&.to_int_pair&.join('/'),

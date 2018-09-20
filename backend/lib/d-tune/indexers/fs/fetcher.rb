@@ -41,6 +41,8 @@ module DTune
           DTune::Indexers::FS::DB.new(path: @output_file_path).connect do |db|
             DTune::Indexers::FS::Importer.new(db: db).run(rows)
           end
+
+          parser.report
         end
       end
     end

@@ -1,16 +1,50 @@
 # frozen_string_literal: true
 
+require 'ddmetrics'
+
 module DTune
   module Indexers
     module FS
       class Parser
+        def initialize
+          @import_durations_summary = DDMetrics::Summary.new
+          @track_durations_summary = DDMetrics::Summary.new
+          @track_sizes_summary = DDMetrics::Summary.new
+        end
+
+        def report
+          puts "Import durations (s):"
+          puts @import_durations_summary
+          puts
+
+          puts "Track durations (min):"
+          puts @track_durations_summary
+          puts
+
+          puts "Track sizes (MiB):"
+          puts @track_sizes_summary
+          puts
+        end
+
         def parse_file(filename)
-          case File.extname(filename)
-          when '.mp3'
-            parse_mp3_file(filename)
-          when '.m4a'
-            parse_m4a_file(filename)
-          end
+          stopwatch = DDMetrics::Stopwatch.new
+          stopwatch.start
+
+          res =
+            case File.extname(filename)
+            when '.mp3'
+              parse_mp3_file(filename)
+            when '.m4a'
+              parse_m4a_file(filename)
+            end
+
+          stopwatch.stop
+
+          @import_durations_summary.observe(stopwatch.duration, ext: File.extname(filename))
+          @track_durations_summary.observe(res.fetch(:duration) / 60.0, ext: File.extname(filename))
+          @track_sizes_summary.observe(File.stat(filename).size / 1024.0 / 1024, ext: File.extname(filename))
+
+          res
         end
 
         def parse_mp3_file(filename)

@@ -3,6 +3,7 @@
 source 'https://rubygems.org'
 
 gem 'ddplugin', '~> 1.0', '>= 1.0.2'
+gem 'ddmetrics'
 gem 'dotenv'
 gem 'excon'
 gem 'google-id-token'

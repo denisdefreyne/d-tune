@@ -44,7 +44,7 @@ const buildLibrary = (everything: EverythingResponse): Library => {
     everything.labels.map((l) => ({ ...l, isSpecial: false }));
 
   const artists: Artist[] =
-    everything.artists;
+    everything.artists.map((a) => ({ ...a, isSpecial: false }));
 
   const albums: Album[] =
     everything.albums.map((a) => ({ ...a, artist: artists.find((art) => a.artist_id === art.id)!, label: labels.find((l) => a.label_id === l.id) || null}));

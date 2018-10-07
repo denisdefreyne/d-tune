@@ -33,6 +33,25 @@ module DTune
       end
     end
 
+    class AuthAuth
+      def initialize(app, auth_client_id:, permitted_emails:)
+        @app = app
+
+        @authenticator = Authenticator.new(auth_client_id)
+        @authorizer = Authorizer.new(permitted_emails)
+      end
+
+      def call(env)
+        payload = @authenticator.run(env)
+        @authorizer.run(payload)
+        @app.call(env)
+      rescue Authenticator::Error
+        [403, { 'Content-Type' => 'application/json' }, [JSON.dump(reason: 'Your token is invalid.')]]
+      rescue Authorizer::Error
+        [403, { 'Content-Type' => 'application/json' }, [JSON.dump(reason: 'You are not allowed to access this.')]]
+      end
+    end
+
     class App < Sinatra::Base
       use Rack::CommonLogger
 
@@ -49,23 +68,9 @@ module DTune
       server_source_class = DTune::Server::Source.named(server_source_type)
       set :source, server_source_class.new_from_env.tap(&:connect)
 
-      set :authenticator, Authenticator.new(ENV.fetch('SERVER_AUTH_CLIENT_ID'))
-      set :authorizer, Authorizer.new(Set.new(ENV.fetch('SERVER_AUTH_PERMITTED_EMAILS').split(',')))
-
-      before do
-        content_type :json
-
-        begin
-          payload = settings.authenticator.run(request.env)
-          settings.authorizer.run(payload)
-        rescue Authenticator::Error
-          body JSON.dump(reason: 'Your token is invalid.')
-          halt 403
-        rescue Authorizer::Error
-          body JSON.dump(reason: 'You are not allowed to access this.')
-          halt 403
-        end
-      end
+      use AuthAuth,
+        auth_client_id: ENV.fetch('SERVER_AUTH_CLIENT_ID'),
+        permitted_emails: Set.new(ENV.fetch('SERVER_AUTH_PERMITTED_EMAILS').split(','))
 
       get '/test' do
         json success: true

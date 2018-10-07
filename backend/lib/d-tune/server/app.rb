@@ -2,6 +2,23 @@
 
 module DTune
   module Server
+    class Authenticator
+      class Error < ::StandardError
+      end
+
+      def initialize(client_id)
+        @token_validator = GoogleIDToken::Validator.new
+        @client_id = client_id
+      end
+
+      def run(env)
+        token = env['HTTP_DTUNE_ACCESS_TOKEN']
+        @token_validator.check(token, @client_id)
+      rescue GoogleIDToken::ValidationError
+        raise Error
+      end
+    end
+
     class App < Sinatra::Base
       use Rack::CommonLogger
 
@@ -18,23 +35,21 @@ module DTune
       server_source_class = DTune::Server::Source.named(server_source_type)
       set :source, server_source_class.new_from_env.tap(&:connect)
 
-      set :token_validator, GoogleIDToken::Validator.new
-      set :client_id, ENV.fetch('SERVER_AUTH_CLIENT_ID')
       set :permitted_emails, Set.new(ENV.fetch('SERVER_AUTH_PERMITTED_EMAILS').split(','))
+      set :authenticator, Authenticator.new(ENV.fetch('SERVER_AUTH_CLIENT_ID'))
 
       before do
         content_type :json
 
         begin
-          token = request.env['HTTP_DTUNE_ACCESS_TOKEN']
-          payload = settings.token_validator.check(token, settings.client_id)
+          payload = settings.authenticator.run(request.env)
 
           email = payload.fetch('email')
           unless settings.permitted_emails.include?(email)
             body JSON.dump(reason: 'You are not Denis.')
             halt 403
           end
-        rescue GoogleIDToken::ValidationError
+        rescue Authenticator::Error
           body JSON.dump(reason: 'Your token is invalid.')
           halt 403
         end

@@ -19,6 +19,20 @@ module DTune
       end
     end
 
+    class Authorizer
+      class Error < ::StandardError
+      end
+
+      def initialize(permitted_emails)
+        @permitted_emails = permitted_emails
+      end
+
+      def run(payload)
+        email = payload.fetch('email')
+        raise Error unless @permitted_emails.include?(email)
+      end
+    end
+
     class App < Sinatra::Base
       use Rack::CommonLogger
 
@@ -35,22 +49,20 @@ module DTune
       server_source_class = DTune::Server::Source.named(server_source_type)
       set :source, server_source_class.new_from_env.tap(&:connect)
 
-      set :permitted_emails, Set.new(ENV.fetch('SERVER_AUTH_PERMITTED_EMAILS').split(','))
       set :authenticator, Authenticator.new(ENV.fetch('SERVER_AUTH_CLIENT_ID'))
+      set :authorizer, Authorizer.new(Set.new(ENV.fetch('SERVER_AUTH_PERMITTED_EMAILS').split(',')))
 
       before do
         content_type :json
 
         begin
           payload = settings.authenticator.run(request.env)
-
-          email = payload.fetch('email')
-          unless settings.permitted_emails.include?(email)
-            body JSON.dump(reason: 'You are not Denis.')
-            halt 403
-          end
+          settings.authorizer.run(payload)
         rescue Authenticator::Error
           body JSON.dump(reason: 'Your token is invalid.')
+          halt 403
+        rescue Authorizer::Error
+          body JSON.dump(reason: 'You are not allowed to access this.')
           halt 403
         end
       end
